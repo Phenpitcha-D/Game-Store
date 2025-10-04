@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+/* ให้ทั้งหน้าเป็นโทนมืดตั้งแต่เฟรมแรก */
+html, body {
+  height: 100%;
+  background: #0F1115!important;   /* ดำ */
+  color: #e5e7eb;                    /* สีตัวอักษรให้อ่านง่าย */
+}
+
+/* override ตัวแปรของ Bootstrap 5.3+ */
+:root{
+  --bs-body-bg: #0F1115
+  --bs-body-color: #e5e7eb;
+}
