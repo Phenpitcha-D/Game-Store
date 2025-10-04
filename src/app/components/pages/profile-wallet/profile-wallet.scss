@@ -1,0 +1,85 @@
+/* Avatar */
+.avatar{
+  width:136px; height:136px; border-radius:50%; overflow:hidden;
+  border:4px solid rgba(255,255,255,.12);
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+.avatar img{ width:100%; height:100%; object-fit:cover; }
+
+/* Card glass */
+.glass{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+/* Chips */
+.btn-chip{
+  background: rgba(255,255,255,.05);
+  color: #e8e8e8;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 1.2rem;
+  padding: .55rem .95rem;
+}
+.btn-chip:hover,
+.btn-chip:focus{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+  color:#fff;
+}
+
+/* Inputs */
+.input-group .input-group-text,
+.input-group .form-control{
+  background: rgba(255,255,255,.05);
+  color: #e8e8e8;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.input-group .form-control::placeholder{ color:#9aa3b2; }
+.input-group > :first-child{ border-top-left-radius:.9rem; border-bottom-left-radius:.9rem; }
+.input-group > :last-child { border-top-right-radius:.9rem; border-bottom-right-radius:.9rem; }
+
+/* Transaction pills */
+.tx-pill{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: .9rem;
+  padding: .9rem 1.1rem;
+}
+.tx-pill i{ opacity:.9; }
+.date-tag{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: .6rem;
+  padding: .25rem .6rem;
+  font-size: .9rem;
+  color: #cfcfcf;
+}
+
+/* ทำสีตัวอักษรหลักของหน้านี้เป็นขาว */
+:host { color: #fff; }
+
+/* หัวข้อทั้งหมด */
+h1, h2, h3, h4, h5, h6 { color: #fff; }
+
+/* ข้อความในการ์ด/พิลล์ */
+.glass, .glass .card-body, .tx-pill { color: #fff; }
+
+/* ปุ่มต่าง ๆ ให้ตัวหนังสือขาว */
+.btn-seg,
+.btn-seg:hover,
+.btn-seg:focus,
+.btn-seg.active,
+.btn-chip,
+.btn-chip:hover,
+.btn-chip:focus { color: #fff; }
+
+/* อินพุต */
+.input-group .form-control,
+.input-group .input-group-text { color: #fff; }
+
+/* (ถ้าต้องการให้ placeholder สว่างขึ้นด้วย) */
+// .input-group .form-control::placeholder { color: rgba(255,255,255,.75); }
+
+/* แท็กวันที่ให้ขาวด้วย */
+.date-tag { color: #fff; }
+
