@@ -7,12 +7,12 @@ import { CommonModule } from '@angular/common';
 type Mode = 'login' | 'register';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.html',
-  styleUrls: ['./login.scss'],
+  selector: 'app-auth',
+  templateUrl: './auth.html',
+  styleUrls: ['./auth.scss'],
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class Login implements OnInit {
+export class Auth implements OnInit {
   mode: Mode = 'login';
 
   // ฟอร์ม
