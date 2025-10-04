@@ -1,53 +1,55 @@
 <!-- header.component.html -->
-<nav class="navbar navbar-dark bg-dark bg-opacity-75 sticky-top border-bottom border-secondary">
-    <div class="container-fluid py-2 d-flex align-items-center gap-2 flex-nowrap">
-        <!-- Brand -->
-        <a class="navbar-brand d-flex align-items-center gap-2 m-0" routerLink="/">
-            <i class="bi bi-shield-check fs-5"></i>
-            <span class="fw-semibold">GameShop</span>
-            <small class="text-white-50">Epic x Steam</small>
-        </a>
+<nav class="navbar sticky-top py-2"
+     style="background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-bottom:1px solid rgba(255,255,255,.12)">
+  <div class="container-xxl d-flex align-items-center gap-2">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center gap-2 m-0 text-white"
+       routerLink="/" style="letter-spacing:.4px">
+      <i class="bi bi-shield-check" style="font-size:1.2rem"></i>
+      <span class="fw-semibold">GameShop</span>
+      <span class="text-secondary small">Epic x Steam</span>
+    </a>
 
-        <!-- Center nav (desktop) -->
-        <div class="ms-3 d-none d-md-flex align-items-center gap-2 flex-nowrap">
-            <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-                routerLink="/store">
-                <i class="bi bi-controller"></i><span>Store</span>
-            </a>
+    <!-- Center nav (desktop) -->
+    <div class="ms-2 d-none d-md-flex align-items-center gap-2 flex-wrap">
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
+         routerLink="">
+        <i class="bi bi-controller"></i><span>Store</span>
+      </a>
 
-            <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-                routerLink="/top-sellers">
-                <i class="bi bi-award"></i><span>Top Sellers</span>
-            </a>
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
+         routerLink="/top-sellers">
+        <i class="bi bi-bar-chart"></i><span>Top Sellers</span>
+      </a>
 
-            <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-                routerLink="/library">
-                <i class="bi bi-collection"></i><span>Library</span>
-            </a>
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
+         routerLink="/library">
+        <i class="bi bi-collection"></i><span>Library</span>
+      </a>
 
-            <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-                routerLink="/profile">
-                <i class="bi bi-person-circle"></i><span>Profile &amp; Wallet</span>
-            </a>
-        </div>
-
-        <!-- Right side -->
-        <div class="ms-auto d-flex align-items-center gap-2">
-            <!-- Cart -->
-            <button type="button" class="btn btn-outline-light btn-sm rounded-pill position-relative"
-                (click)="goTo('cart')">
-                <i class="bi bi-cart2"></i>
-                <!-- badge แสดงจำนวนในตะกร้า -->
-                <span *ngIf="cartCount && cartCount > 0"
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
-                    {{ cartCount }}
-                </span>
-            </button>
-
-            <!-- LogIn -->
-            <a class="btn btn-outline-light btn-sm rounded-pill px-3" routerLink="/login">
-                Login
-            </a>
-        </div>
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
+         routerLink="/profile">
+        <i class="bi bi-wallet2"></i><span>Profile &amp; Wallet</span>
+      </a>
     </div>
+
+    <!-- Right side -->
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <!-- Cart -->
+      <button type="button"
+              class="btn btn-outline-light btn-sm rounded-pill position-relative"
+              (click)="goTo('cart')">
+        <i class="bi bi-cart3 me-1"></i>
+        <span *ngIf="cartCount && cartCount > 0"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+          {{ cartCount }}
+        </span>
+      </button>
+
+      <!-- Login -->
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3" routerLink="/login">
+        Login
+      </a>
+    </div>
+  </div>
 </nav>
