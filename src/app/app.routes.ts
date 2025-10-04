@@ -6,5 +6,5 @@ import { Auth } from './components/pages/auth/auth';
 export const routes: Routes = [
     { path : '', component: Home},
     { path : 'login', component: Auth},
-    {path: 'profile-wallet', component: ProfileWallet },
+    { path : 'profile-wallet', component: ProfileWallet },
 ];

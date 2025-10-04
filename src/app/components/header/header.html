@@ -1,10 +1,9 @@
 <!-- header.component.html -->
 <nav class="navbar sticky-top py-2"
-     style="background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-bottom:1px solid rgba(255,255,255,.12)">
+  style="background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-bottom:1px solid rgba(255,255,255,.12)">
   <div class="container-xxl d-flex align-items-center gap-2">
     <!-- Brand -->
-    <a class="navbar-brand d-flex align-items-center gap-2 m-0 text-white"
-       routerLink="/" style="letter-spacing:.4px">
+    <a class="navbar-brand d-flex align-items-center gap-2 m-0 text-white" routerLink="/" style="letter-spacing:.4px">
       <i class="bi bi-shield-check" style="font-size:1.2rem"></i>
       <span class="fw-semibold">GameShop</span>
       <span class="text-secondary small">Epic x Steam</span>
@@ -12,36 +11,36 @@
 
     <!-- Center nav (desktop) -->
     <div class="ms-2 d-none d-md-flex align-items-center gap-2 flex-wrap">
-      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-         routerLink="">
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="">
         <i class="bi bi-controller"></i><span>Store</span>
       </a>
 
       <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-         routerLink="/top-sellers">
+        routerLink="/top-sellers">
         <i class="bi bi-bar-chart"></i><span>Top Sellers</span>
       </a>
 
-      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-         routerLink="/library">
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/library">
         <i class="bi bi-collection"></i><span>Library</span>
       </a>
 
-            <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-                routerLink="/profile-wallet">
-                <i class="bi bi-person-circle"></i><span>Profile &amp; Wallet</span>
-            </a>
-        </div>
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
+        routerLink="/profile-wallet">
+        <i class="bi bi-person-circle"></i><span>Profile &amp; Wallet</span>
+      </a>
+
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/library">
+        <i class="bi bi-sliders"></i><span>Admin</span>
+      </a>
+    </div>
 
     <!-- Right side -->
     <div class="ms-auto d-flex align-items-center gap-2">
       <!-- Cart -->
-      <button type="button"
-              class="btn btn-outline-light btn-sm rounded-pill position-relative"
-              (click)="goTo('cart')">
+      <button type="button" class="btn btn-outline-light btn-sm rounded-pill position-relative" (click)="goTo('cart')">
         <i class="bi bi-cart3 me-1"></i>
         <span *ngIf="cartCount && cartCount > 0"
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
           {{ cartCount }}
         </span>
       </button>
