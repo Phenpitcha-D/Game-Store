@@ -4,12 +4,12 @@
     <div class="row align-items-center g-3 mb-4">
         <div class="col-auto">
             <div class="avatar shadow-sm">
-                <img [src]="user.avatarUrl" alt="avatar">
+                <img [src]="currentUser?.user?.img || defaultAvatar" alt="avatar">
             </div>
         </div>
         <div class="col">
-            <h3 class="mb-1 text-white fw-semibold">{{ user.name }}</h3>
-            <div class="text-secondary">{{ user.email }}</div>
+            <h3 class="mb-1 text-white fw-semibold">{{ currentUser?.user?.username }}</h3>
+            <div class="text-secondary">{{ currentUser?.user?.email }}</div>
         </div>
     </div>
 
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="display-6 fw-semibold text-white mb-3">
-                        ฿ {{ balance | number:'1.0-0' }}
+                        ฿ {{ currentUser?.user?.wallet_balance| number:'1.0-0' }} บาท
                     </div>
 
                     <div class="d-flex flex-wrap gap-2 mb-3">

@@ -1,5 +1,107 @@
-/* header.component.scss (ตัวเลือกเสริม) */
-.navbar.bg-opacity-75 {
+/* --- Avatar sizes --- */
+.avatar-32 {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.avatar-40 {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* --- Profile chip & area --- */
+.profile-area {
+  position: relative;
+}
+.btn-profile {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 4px 10px;
+  line-height: 1;
+}
+.btn-profile:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* --- Popover card (dark glass) --- */
+.popover-card {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 300px;
+  background: rgba(18, 18, 18, 0.96);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  z-index: 1060;
+  animation: pop 0.12s ease-out;
+}
+
+/* arrow */
+.popover-card::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 18px;
+  width: 16px;
+  height: 16px;
+  background: inherit;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  transform: rotate(45deg);
+}
+
+@keyframes pop {
+  from {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.label.tiny {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+.wallet {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.btn-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  text-align: center;
+}
+.btn-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.btn-logout {
+  background: #fff;
+  color: #111;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 600;
+}
+.btn-logout:hover {
+  filter: brightness(0.92);
 }

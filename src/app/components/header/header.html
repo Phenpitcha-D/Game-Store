@@ -1,4 +1,3 @@
-<!-- header.component.html -->
 <nav class="navbar sticky-top py-2"
   style="background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-bottom:1px solid rgba(255,255,255,.12)">
   <div class="container-xxl d-flex align-items-center gap-2">
@@ -15,8 +14,7 @@
         <i class="bi bi-controller"></i><span>Store</span>
       </a>
 
-      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-        routerLink="/top-sellers">
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/top-sellers">
         <i class="bi bi-bar-chart"></i><span>Top Sellers</span>
       </a>
 
@@ -24,48 +22,79 @@
         <i class="bi bi-collection"></i><span>Library</span>
       </a>
 
-      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
-        routerLink="/profile-wallet">
+      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/profile-wallet">
         <i class="bi bi-person-circle"></i><span>Profile &amp; Wallet</span>
       </a>
 
       <a *ngIf="(currentUser?.user?.role || '').toLowerCase() === 'admin'"
-        class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/library">
+         class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2"
+         routerLink="/library">
         <i class="bi bi-sliders"></i><span>Admin</span>
       </a>
     </div>
 
-    <!-- Right side -->
-    <div class="ms-auto d-flex align-items-center gap-2">
-      <!-- Cart -->
-      <button type="button" class="btn btn-outline-light btn-sm rounded-pill position-relative" (click)="goTo('cart')">
+    <!-- Right side (ชิดขวาสุด) -->
+    <div class="ms-auto d-flex align-items-center justify-content-end gap-2" style="min-width:220px;">
+      <!-- Cart: อยู่ก่อน profile และห่างกันเล็กน้อย -->
+      <button type="button"
+              class="btn btn-outline-light btn-sm rounded-pill position-relative me-1"
+              (click)="goTo('cart')">
         <i class="bi bi-cart3 me-1"></i>
         <span *ngIf="cartCount && cartCount > 0"
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
           {{ cartCount }}
         </span>
       </button>
 
-      <!-- ถ้า "ยังไม่ล็อกอิน": โชว์ปุ่ม Login -->
-      <a *ngIf="!currentUser" class="btn btn-outline-light btn-sm rounded-pill px-3" routerLink="/login">
-        Login
-      </a>
+      <!-- ถ้ายังไม่ล็อกอิน -->
+      <a *ngIf="!currentUser"
+         class="btn btn-outline-light btn-sm rounded-pill px-3"
+         routerLink="/login">Login</a>
 
-      <!-- ถ้า "ล็อกอินแล้ว": โชว์รูปโปรไฟล์ (กดไปหน้าโปรไฟล์/วอลเล็ต) -->
-      <button *ngIf="currentUser" type="button" class="btn p-0 border-0 bg-transparent px-3"
-        routerLink="/profile-wallet" title="{{ currentUser.user.username || currentUser.user.email || 'Profile' }}">
-        <img [src]="currentUser.user.img || 'assets/images/default-avatar.png'" alt="avatar" class="rounded-circle"
-          style="width:36px;height:36px;object-fit:cover;border:1px solid rgba(255,255,255,.35)" />
-      </button>
-      <h6 class="text-white px-3">
-        {{currentUser?.user?.username}}
-      </h6>
+      <!-- โปรไฟล์: อยู่สุดขวา -->
+      <div *ngIf="currentUser" class="profile-area ms-1" (click)="$event.stopPropagation()">
+        <!-- Chip: avatar + name + caret -->
+        <button type="button"
+                class="btn btn-profile d-flex align-items-center gap-2"
+                (click)="toggleProfileMenu()"
+                [attr.aria-expanded]="isProfileOpen">
+          <img [src]="currentUser?.user?.img || defaultAvatar"
+               (error)="onImgError($event)"
+               alt="avatar"
+               class="avatar-32" />
+          <span class="d-none d-lg-inline text-truncate" style="max-width:160px">
+            {{ currentUser?.user?.username }}
+          </span>
+          <i class="bi" [ngClass]="isProfileOpen ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
+        </button>
 
-      <!-- ปุ่มออกจากระบบ (ถ้าต้องการ) -->
-      <button *ngIf="currentUser" class="btn btn-outline-light btn-sm rounded-pill" (click)="signOut()">
-        Logout
-      </button>
+        <!-- Popover card -->
+        <div *ngIf="isProfileOpen" class="popover-card">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <img [src]="currentUser?.user?.img || defaultAvatar"
+                 (error)="onImgError($event)"
+                 alt="avatar"
+                 class="avatar-40" />
+            <div class="min-w-0">
+              <div class="fw-semibold text-white text-truncate">
+                {{ currentUser?.user?.username || 'User' }}
+              </div>
+              <div class="text-secondary small text-truncate">
+                {{ currentUser?.user?.email }}
+              </div>
+            </div>
+          </div>
+
+          <div class="label tiny">Wallet</div>
+          <div class="wallet mb-3">฿ {{ currentUser?.user?.wallet_balance | number:'1.0-0' }}</div>
+
+          <div class="d-grid gap-2">
+            <a class="btn btn-item" routerLink="/profile-wallet" (click)="closeProfileMenu()">ดูโปรไฟล์</a>
+            <a class="btn btn-item" routerLink="/profile-wallet" [queryParams]="{ edit: true }" (click)="closeProfileMenu()">แก้ไขโปรไฟล์</a>
+            <button class="btn btn-logout" (click)="signOut()">Logout</button>
+          </div>
+        </div>
+      </div>
     </div>
-
   </div>
 </nav>
