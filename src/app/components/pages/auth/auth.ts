@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { Convert, UserLoginRespon } from '../../models/user_login_res';
 
 type Mode = 'login' | 'register';
 
@@ -57,11 +58,11 @@ export class Auth implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.minLength(2)]], // รองรับ username หรือ email
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
@@ -112,16 +113,26 @@ export class Auth implements OnInit {
     this.registerForm.get('avatar')?.setErrors(null);
   }
 
-  // === Submit: Login ===
+  private isEmail(text: string): boolean {
+    return /\S+@\S+\.\S+/.test(String(text || '').trim());
+  }
+
   submitLogin() {
     if (this.loginForm.invalid) { this.loginForm.markAllAsTouched(); return; }
     this.isSubmitting = true;
     this.apiError = undefined;
 
     const { email, password } = this.loginForm.value as { email: string; password: string };
+    const identity = (email || '').trim();
 
-    // แบ็กเอนด์รองรับ username หรือ email — ตรงนี้ส่ง email
-    this.http.post<AuthResponse>(`${this.base}/login`, { email, password })
+    // เลือก payload ให้ตรงกับเส้นที่คุณต้องการ
+    // - ถ้าพิมพ์อีเมล -> { email, password }
+    // - ถ้าพิมพ์ยูส -> { username, password }
+    const body: Record<string, any> = this.isEmail(identity)
+      ? { email: identity, password }
+      : { username: identity, password };
+
+    this.http.post<AuthResponse>(`${this.base}/login`, body)
       .pipe(finalize(() => this.isSubmitting = false))
       .subscribe({
         next: (res) => {
@@ -129,10 +140,16 @@ export class Auth implements OnInit {
             this.apiError = res.message || 'Login failed';
             return;
           }
-          // เก็บ session แบบง่าย ๆ
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('user', JSON.stringify(res.user));
-          // ไปหน้าหลัก (แก้ปลายทางตามที่ต้องการ)
+
+          const validated: UserLoginRespon = Convert.toUserLoginRespon(JSON.stringify(res));
+          if (!validated.success || !validated.token || !validated.user) {
+            this.apiError = validated.message || 'Login failed';
+            return;
+          }
+
+          localStorage.setItem('token', res.token!);
+          localStorage.setItem('user', Convert.userLoginResponToJson(validated));
+          window.dispatchEvent(new CustomEvent('auth-changed'));
           this.router.navigateByUrl('/');
         },
         error: (err) => {
@@ -140,6 +157,7 @@ export class Auth implements OnInit {
         }
       });
   }
+
 
   // === Submit: Register ===
   submitRegister() {
@@ -169,8 +187,18 @@ export class Auth implements OnInit {
             this.apiError = res.message || 'Register failed';
             return;
           }
+
+          const validated: UserLoginRespon = Convert.toUserLoginRespon(JSON.stringify(res));
+
+          if (!validated.success || !validated.token || !validated.user) {
+            this.apiError = validated.message || 'Login failed';
+            return;
+          }
+
           localStorage.setItem('token', res.token);
-          localStorage.setItem('user', JSON.stringify(res.user));
+          // localStorage.setItem('user', JSON.stringify(res.user));
+          localStorage.setItem('user', Convert.userLoginResponToJson(validated));
+          window.dispatchEvent(new CustomEvent('auth-changed'));
           this.router.navigateByUrl('/');
         },
         error: (err) => {

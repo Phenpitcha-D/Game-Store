@@ -25,12 +25,14 @@
                     <form *ngIf="mode==='login'" [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
                         <div class="mb-3">
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <input formControlName="email" type="email" class="form-control" placeholder="Email">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <!-- เปลี่ยน type ให้รับได้ทั้ง username และ email -->
+                                <input formControlName="email" type="text" class="form-control"
+                                    placeholder="Username or Email">
                             </div>
                             <div class="invalid-hint"
                                 *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-                                โปรดกรอกอีเมลให้ถูกต้อง
+                                โปรดกรอก Username หรือ Email (อย่างน้อย 2 ตัวอักษร)
                             </div>
                         </div>
 
@@ -48,6 +50,7 @@
 
                         <button class="btn btn-chip w-100 btn-lg" type="submit">Login</button>
                     </form>
+
 
                     <!-- REGISTER FORM -->
                     <form *ngIf="mode==='register'" [formGroup]="registerForm" (ngSubmit)="submitRegister()" novalidate>
@@ -126,7 +129,6 @@
 
                 </div>
             </div>
-
         </div>
     </div>
 </div>

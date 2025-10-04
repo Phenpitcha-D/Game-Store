@@ -5,7 +5,7 @@
     <!-- Brand -->
     <a class="navbar-brand d-flex align-items-center gap-2 m-0 text-white" routerLink="/" style="letter-spacing:.4px">
       <i class="bi bi-shield-check" style="font-size:1.2rem"></i>
-      <span class="fw-semibold">GameShop</span>
+      <span class="fw-semibold">GameStore</span>
       <span class="text-secondary small">Epic x Steam</span>
     </a>
 
@@ -45,10 +45,26 @@
         </span>
       </button>
 
-      <!-- Login -->
-      <a class="btn btn-outline-light btn-sm rounded-pill px-3" routerLink="/login">
+      <!-- ถ้า "ยังไม่ล็อกอิน": โชว์ปุ่ม Login -->
+      <a *ngIf="!currentUser" class="btn btn-outline-light btn-sm rounded-pill px-3" routerLink="/login">
         Login
       </a>
+
+      <!-- ถ้า "ล็อกอินแล้ว": โชว์รูปโปรไฟล์ (กดไปหน้าโปรไฟล์/วอลเล็ต) -->
+      <button *ngIf="currentUser" type="button" class="btn p-0 border-0 bg-transparent px-3" routerLink="/profile-wallet"
+        title="{{ currentUser.user.username || currentUser.user.email || 'Profile' }}">
+        <img [src]="currentUser.user.img || 'assets/images/default-avatar.png'" alt="avatar" class="rounded-circle"
+          style="width:36px;height:36px;object-fit:cover;border:1px solid rgba(255,255,255,.35)" />
+      </button>
+      <h6 class="text-white px-3">
+        {{currentUser?.user?.username}}
+      </h6>
+
+      <!-- ปุ่มออกจากระบบ (ถ้าต้องการ) -->
+      <button *ngIf="currentUser" class="btn btn-outline-light btn-sm rounded-pill" (click)="signOut()">
+        Logout
+      </button>
     </div>
+
   </div>
 </nav>
