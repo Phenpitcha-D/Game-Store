@@ -29,7 +29,8 @@
         <i class="bi bi-person-circle"></i><span>Profile &amp; Wallet</span>
       </a>
 
-      <a class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/library">
+      <a *ngIf="(currentUser?.user?.role || '').toLowerCase() === 'admin'"
+        class="btn btn-outline-light btn-sm rounded-pill px-3 d-flex align-items-center gap-2" routerLink="/library">
         <i class="bi bi-sliders"></i><span>Admin</span>
       </a>
     </div>
@@ -51,8 +52,8 @@
       </a>
 
       <!-- ถ้า "ล็อกอินแล้ว": โชว์รูปโปรไฟล์ (กดไปหน้าโปรไฟล์/วอลเล็ต) -->
-      <button *ngIf="currentUser" type="button" class="btn p-0 border-0 bg-transparent px-3" routerLink="/profile-wallet"
-        title="{{ currentUser.user.username || currentUser.user.email || 'Profile' }}">
+      <button *ngIf="currentUser" type="button" class="btn p-0 border-0 bg-transparent px-3"
+        routerLink="/profile-wallet" title="{{ currentUser.user.username || currentUser.user.email || 'Profile' }}">
         <img [src]="currentUser.user.img || 'assets/images/default-avatar.png'" alt="avatar" class="rounded-circle"
           style="width:36px;height:36px;object-fit:cover;border:1px solid rgba(255,255,255,.35)" />
       </button>
