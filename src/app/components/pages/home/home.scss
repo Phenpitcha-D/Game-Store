@@ -1,0 +1,36 @@
+    :root{
+      --bg:#0F1115;
+      --surface:#121826;
+      --surface-2:#121826;
+      --border:rgba(255,255,255,.10);
+      --border-soft:rgba(255,255,255,.06);
+      --chip-bg:#0f1627;
+      --chip-border:#1e293b;
+      --chip-text:#cbd5e1;
+      --muted:#94a3b8;
+      --muted-2:#9CA3AF;
+    }
+    body{ background:var(--bg)!important; }
+    .card-dark{ background:var(--surface); border:1px solid var(--border-soft); }
+    .surface-gradient{
+      background:linear-gradient(135deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 100%);
+    }
+    .chip{
+      background:var(--chip-bg);
+      border:1px solid var(--chip-border);
+      color:var(--chip-text);
+    }
+    .btn-soft{ background:rgba(255,255,255,.10); border:1px solid var(--border); color:#fff; }
+    .btn-soft-strong{ background:rgba(255,255,255,.15); border:1px solid var(--border); color:#fff; }
+    .form-control.bg-glass{
+      background:rgba(255,255,255,.05);
+      border-color:var(--border);
+      color:#e5e7eb;
+    }
+    .form-control.bg-glass::placeholder{ color:var(--muted-2); }
+    .hero-thumb{ height:260px; object-fit:cover; }
+    .card-game img{ height:130px; object-fit:cover; }
+    .card-game .price{ color:rgba(255,255,255,.80); }
+    .rounded-xl{ border-radius:16px; } /* helper so old class won't break */
+    .border-divider{ border-color:#1e293b!important; }
+    .hover-outline:hover{ box-shadow:0 0 0 1px rgba(255,255,255,.12) inset; }
