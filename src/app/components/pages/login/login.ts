@@ -19,13 +19,11 @@ export class Login implements OnInit {
   loginForm!: FormGroup;
   registerForm!: FormGroup;
 
-  // อวาตาร์
   readonly maxAvatarMB = 2;
   readonly allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
   avatarPreview?: string;     // data URL สำหรับแสดงพรีวิว
   private avatarFile?: File;  // ไฟล์จริง (ส่งไป backend)
 
-  // DI
   private fb = inject(FormBuilder);
   constructor(private route: ActivatedRoute, private router: Router) {}
 
