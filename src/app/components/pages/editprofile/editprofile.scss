@@ -1,0 +1,57 @@
+/* โทนพื้นหลังทั้งหน้า */
+:host { display:block; }
+.auth-wrap { min-height: 70dvh; }
+
+/* การ์ด glass = ขาว 5% */
+.glass {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+/* ปุ่มชิปทั่วไป */
+.btn-chip {
+  background: rgba(255,255,255,.05);
+  color: #e8e8e8;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25) inset, 0 2px 6px rgba(0,0,0,.2);
+}
+.btn-chip:hover,
+.btn-chip:focus {
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+  color: #fff;
+}
+
+/* input-group ให้เข้าธีม 5% */
+.input-group .input-group-text {
+  background: rgba(255,255,255,.05);
+  color: #cfcfcf;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.input-group .form-control {
+  background: rgba(255,255,255,.05);
+  color: #e8e8e8;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.input-group .form-control::placeholder { color: #9aa3b2; }
+.input-group > :first-child { border-top-left-radius: .9rem; border-bottom-left-radius: .9rem; }
+.input-group > :last-child  { border-top-right-radius: .9rem; border-bottom-right-radius: .9rem; }
+
+/* Avatar */
+.avatar { width:128px; height:128px; position:relative; }
+.avatar-img, .avatar-placeholder {
+  width:100%; height:100%; border-radius:50%; object-fit:cover;
+  border:4px solid rgba(255,255,255,.12);
+  box-shadow:0 6px 16px rgba(0,0,0,.35);
+  background: rgba(255,255,255,.05);
+  color:#cfcfcf;
+}
+.btn-add, .btn-remove {
+  position:absolute; bottom:6px; width:30px; height:30px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.25);
+  color:#fff;
+}
+.btn-add   { right:6px; background: rgba(255,255,255,.10); }
+.btn-remove{ left: 6px; background: rgba(255,255,255,.06); }

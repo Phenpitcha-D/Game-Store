@@ -90,7 +90,7 @@
 
           <div class="d-grid gap-2">
             <a class="btn btn-item" routerLink="/profile-wallet" (click)="closeProfileMenu()">ดูโปรไฟล์</a>
-            <a class="btn btn-item" routerLink="/profile-wallet" [queryParams]="{ edit: true }" (click)="closeProfileMenu()">แก้ไขโปรไฟล์</a>
+            <a class="btn btn-item" routerLink="/editprofile" [queryParams]="{ edit: true }" (click)="closeProfileMenu()">แก้ไขโปรไฟล์</a>
             <button class="btn btn-logout" (click)="signOut()">Logout</button>
           </div>
         </div>

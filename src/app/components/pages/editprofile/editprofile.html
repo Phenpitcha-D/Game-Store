@@ -1,0 +1,70 @@
+<div class="auth-wrap container py-4 py-lg-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+
+            <!-- Card glass -->
+            <div class="card glass rounded-4 shadow-sm">
+                <div class="card-body p-3 p-md-4">
+                    <h5 class="card-title mb-3 text-white">Edit Profile</h5>
+
+                    <!-- Edit FORM -->
+                    <form [formGroup]="EditForm" (ngSubmit)="submitEdit()" novalidate>
+                        <!-- Avatar picker -->
+                        <div class="text-center mb-3">
+                            <div class="avatar mx-auto position-relative">
+                                <ng-container *ngIf="avatarPreview; else noAvatar">
+                                    <img [src]="avatarPreview" class="avatar-img" alt="avatar">
+                                </ng-container>
+                                <ng-template #noAvatar>
+                                    <div class="avatar-placeholder d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-person-fill fs-1"></i>
+                                    </div>
+                                </ng-template>
+
+                                <!-- ปุ่ม + -->
+                                <button type="button" class="btn btn-add rounded-circle" (click)="fileInput.click()"
+                                    aria-label="Add avatar">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+
+                                <!-- ปุ่มลบ -->
+                                <button *ngIf="avatarPreview" type="button" class="btn btn-remove rounded-circle"
+                                    (click)="clearAvatar()" aria-label="Remove avatar">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+
+                            <input #fileInput type="file" class="d-none" accept="image/png,image/jpeg,image/webp"
+                                (change)="onAvatarSelected($event)">
+                            <div class="form-text mt-2 text-secondary">PNG/JPG/WEBP ≤ {{maxAvatarMB}}MB</div>
+                            <div class="text-danger small" *ngIf="EditForm.get('avatar')?.errors?.['type']">
+                                รองรับเฉพาะ PNG / JPG / WEBP
+                            </div>
+                            <div class="text-danger small" *ngIf="EditForm.get('avatar')?.errors?.['size']">
+                                ไฟล์ใหญ่เกิน {{maxAvatarMB}}MB
+                            </div>
+                        </div>
+
+                        <!-- ฟิลด์ฟอร์ม -->
+                        <div class="mb-3">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input class="form-control" formControlName="username" placeholder="Username">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input class="form-control" type="email" formControlName="email" placeholder="Email">
+                            </div>
+                        </div>
+
+                        <button class="btn btn-chip w-100 btn-lg" type="submit">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
