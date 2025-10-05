@@ -13,7 +13,8 @@
                         <div class="text-center mb-3">
                             <div class="avatar mx-auto position-relative">
                                 <ng-container *ngIf="avatarPreview; else noAvatar">
-                                    <img [src]="avatarPreview" class="avatar-img" alt="avatar">
+                                    <img [src]="avatarPreview || currentUser?.user?.img || 'assets/placeholder-avatar.png'"
+                                        class="avatar-img" alt="avatar">
                                 </ng-container>
                                 <ng-template #noAvatar>
                                     <div class="avatar-placeholder d-flex align-items-center justify-content-center">
