@@ -1,36 +1,93 @@
-    :root{
-      --bg:#0F1115;
-      --surface:#121826;
-      --surface-2:#121826;
-      --border:rgba(255,255,255,.10);
-      --border-soft:rgba(255,255,255,.06);
-      --chip-bg:#0f1627;
-      --chip-border:#1e293b;
-      --chip-text:#cbd5e1;
-      --muted:#94a3b8;
-      --muted-2:#9CA3AF;
-    }
-    body{ background:var(--bg)!important; }
-    .card-dark{ background:var(--surface); border:1px solid var(--border-soft); }
-    .surface-gradient{
-      background:linear-gradient(135deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 100%);
-    }
-    .chip{
-      background:var(--chip-bg);
-      border:1px solid var(--chip-border);
-      color:var(--chip-text);
-    }
-    .btn-soft{ background:rgba(255,255,255,.10); border:1px solid var(--border); color:#fff; }
-    .btn-soft-strong{ background:rgba(255,255,255,.15); border:1px solid var(--border); color:#fff; }
-    .form-control.bg-glass{
-      background:rgba(255,255,255,.05);
-      border-color:var(--border);
-      color:#e5e7eb;
-    }
-    .form-control.bg-glass::placeholder{ color:var(--muted-2); }
-    .hero-thumb{ height:260px; object-fit:cover; }
-    .card-game img{ height:130px; object-fit:cover; }
-    .card-game .price{ color:rgba(255,255,255,.80); }
-    .rounded-xl{ border-radius:16px; } /* helper so old class won't break */
-    .border-divider{ border-color:#1e293b!important; }
-    .hover-outline:hover{ box-shadow:0 0 0 1px rgba(255,255,255,.12) inset; }
+/* ===== Global Theme Vars ===== */
+:root{
+  --bg:#0F1115;
+  --surface:#121826;
+  --surface-2:#121826;
+  --border:rgba(255,255,255,.10);
+  --border-soft:rgba(255,255,255,.06);
+  --chip-bg:rgba(255,255,255,.10);
+  --chip-border:#1e293b;
+  --chip-text:#cbd5e1;
+  --muted:#94a3b8;
+  --muted-2:#9CA3AF;
+}
+
+body{ background:var(--bg)!important; }
+
+/* ===== Surfaces & Borders ===== */
+.card-dark{ background:var(--surface); border:1px solid var(--border-soft); }
+.surface-gradient{
+  background:linear-gradient(135deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 100%);
+}
+.border-divider{ border-color:rgba(255,255,255,.15)!important; }
+
+/* ===== Chips / Badges ===== */
+.chip{
+  border-color:rgba(255,255,255,.15)!important;
+  background-color:rgba(255,255,255,.10);
+  color: rgb(255,255,255);
+  font-weight: 400;
+}
+
+/* ===== Buttons (soft) ===== */
+.btn-soft{
+  background:rgba(255,255,255,.10);
+  border:1px solid var(--border);
+  color:#fff;
+}
+.btn-soft:hover{ background:rgba(255,255,255,.14); color:#fff; }
+
+.btn-soft-strong{
+  background:rgba(255,255,255,.15);
+  border:1px solid var(--border);
+  color:#fff;
+}
+.btn-soft-strong:hover{ background:rgba(255,255,255,.20); color:#fff; }
+
+/* ===== Inputs ===== */
+.form-control.bg-glass{
+  background:rgba(255,255,255,.05);
+  border-color:var(--border);
+  color:#e5e7eb;
+}
+.form-control.bg-glass::placeholder{ color:var(--muted-2); }
+
+/* ===== Hero (Improved) =====
+   - ใช้กับการ์ด Hero ใหม่ (ภาพกินขอบ/โค้ง, 2 คอลัมน์ตั้งแต่ md ขึ้นไป)
+   - ไม่กระทบการใช้งานเดิม
+*/
+.hero-card{
+  /* มี surface-gradient จากคลาสแล้ว */
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset;
+  overflow:hidden; /* ทำให้รูปกินขอบโค้ง */
+}
+.card-body{
+  background:rgba(255,255,255,.05);
+  color: rgba(255,255,255,.7);
+}
+
+.hero-media{
+  height:14rem;    /* ≈ h-56 */
+  overflow:hidden; /* ครอบภาพให้ตัดตามขอบโค้ง */
+}
+@media (min-width:768px){
+  .hero-media{ height:18rem; } /* ≈ md:h-72 */
+}
+
+/* helper สำหรับภาพให้ยืดพอดีกรอบ */
+.object-cover{ object-fit:cover; width:100%; height:100%; }
+
+/* จูนข้อความใน Hero */
+.text-muted-70{ color:rgba(255,255,255,.70); }
+.hero-body p{ text-wrap:pretty; }
+
+/* ===== Legacy hero-thumb (คงไว้เพื่อไม่ให้จุดอื่นพัง) ===== */
+.hero-thumb{ height:260px; object-fit:cover; }
+
+/* ===== Cards: Game Grid ===== */
+.card-game img{ height:130px; object-fit:cover; }
+.card-game .price{ color:rgba(255,255,255,.80); }
+
+/* ===== Utilities ===== */
+.rounded-xl{ border-radius:16px; } /* helper so old class won't break */
+.hover-outline:hover{ box-shadow:0 0 0 1px rgba(255,255,255,.12) inset; }
