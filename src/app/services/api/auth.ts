@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { Constants } from '../../config/constants';
 
 export interface AuthUser {
   uid: number;
@@ -21,18 +22,23 @@ export interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private http = inject(HttpClient);
-  // เปลี่ยนเป็น environment ถ้ามี
-  private base = 'https://game-store-backend-vs08.onrender.com/api/auth';
-
-  register(formData: FormData): Observable<AuthResponse> {
-    // **อย่าเซ็ต Content-Type เอง** ให้ HttpClient จัดการ boundary
-    return this.http.post<AuthResponse>(`${this.base}/register`, formData);
+  constructor(private constants : Constants, private http: HttpClient) {}
+  
+  public async register(formData: FormData){
+    const url = this.constants.API_ENDPOINT + '/api/auth/register';
+    const response = await (this.http.post(url, JSON.stringify(formData)));
+    return response;
   }
 
-  login(body: { username?: string; email?: string; password: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.base}/login`, body);
+  public async login(username?: string, email?: string, password?: string){
+    const url = this.constants.API_ENDPOINT + '/api/auth/login';
+    const response = await (this.http.post(url,  { username, email, password }));
+    return response;
   }
+
+  // login(body: { username?: string; email?: string; password: string }): Observable<AuthResponse> {
+  //   return this.http.post<AuthResponse>(`${this.base}/login`, body);
+  // }
 
   saveSession(token?: string, user?: AuthUser) {
     if (token) localStorage.setItem('token', token);
