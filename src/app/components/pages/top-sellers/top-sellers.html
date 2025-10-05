@@ -1,0 +1,37 @@
+<div class="container py-4 py-lg-5">
+    <div class="card glass rounded-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="text-white fw-semibold mb-3">Top Sellers (by date)</h5>
+
+            <div class="seller-list d-grid gap-3">
+                <button class="seller-item text-start" *ngFor="let g of games" (click)="goToDetails(g)">
+                    <div class="d-flex align-items-center">
+                        <!-- rank bubble -->
+                        <div class="rank me-3">
+                            <span>#{{ g.rank }}</span>
+                        </div>
+
+                        <!-- cover -->
+                        <div class="cover me-3">
+                            <img [src]="g.cover" alt="{{g.title}}">
+                        </div>
+
+                        <!-- title + subtitle -->
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="title text-white text-truncate">{{ g.title }}</div>
+                            <div class="sub text-secondary">Sales period: {{ g.salesDate }}</div>
+                        </div>
+
+                        <!-- price chip -->
+                        <div class="price ms-3">
+                            <span class="badge price-badge">
+                                {{ g.price }} THB
+                            </span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
