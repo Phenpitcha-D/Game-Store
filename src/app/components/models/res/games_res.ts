@@ -1,8 +1,8 @@
 // To parse this data:
 //
-//   import { Convert, GetGameResponse } from "./file";
+//   import { Convert, GameResponse } from "./file";
 //
-//   const getGameResponse = Convert.toGetGameResponse(json);
+//   const gameResponse = Convert.toGameResponse(json);
 
 export interface GameResponse {
     gid:         number;
@@ -10,19 +10,28 @@ export interface GameResponse {
     price:       string;
     description: string;
     released_at: string;
-    developer: string;
+    developer:   string;
     rank_score:  number;
     created_at:  string;
     updated_at:  string;
+    categories?:  Category[];
+}
+
+export interface Category {
+    gcid:          number;
+    gid:           number;
+    tid:           number;
+    type_name:     string;
+    category_name: string;
 }
 
 // Converts JSON strings to/from your types
 export class Convert {
-    public static toGetGameResponse(json: string): GameResponse {
+    public static toGameResponse(json: string): GameResponse {
         return JSON.parse(json);
     }
 
-    public static getGameResponseToJson(value: GameResponse): string {
+    public static gameResponseToJson(value: GameResponse): string {
         return JSON.stringify(value);
     }
 }

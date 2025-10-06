@@ -17,9 +17,11 @@
               developed by <a class="link-light text-decoration-none opacity-75" href="#">{{topgame?.developer}}</a>.
             </p>
             <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-              <span class="badge rounded-pill px-3 py-2 chip border">Single-player</span>
-              <span class="badge rounded-pill px-3 py-2 chip border">Controller</span>
+              <span *ngFor="let cat of topgame?.categories" class="badge rounded-pill px-3 py-2 chip border">
+                {{ cat.category_name }}
+              </span>
             </div>
+
             <div class="d-flex flex-wrap gap-2">
               <a class="btn btn-soft rounded-3 border border-divider" href="#">View Details</a>
               <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
@@ -49,63 +51,58 @@
 
         <!-- GameCard Grid (เลื่อนเฉพาะส่วนนี้) -->
         <!-- GameCard Grid (เลื่อนเฉพาะส่วนนี้) -->
-<div class="game-grid-scroll mt-3">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        <div class="game-grid-scroll mt-3">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
 
-    <ng-container *ngIf="gamesFilted?.length; else emptyGrid">
-      <div class="col" *ngFor="let g of gamesFilted; trackBy: trackByGid">
-        <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
+            <ng-container *ngIf="gamesFilted?.length; else emptyGrid">
+              <div class="col" *ngFor="let g of gamesFilted; trackBy: trackByGid">
+                <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
 
-          <div class="ratio ratio-16x9 bg-black bg-opacity-50">
-            <img class="w-100 h-100 object-fit-cover"
-                 [src]="getCardImage(g)"
-                 [alt]="g.name" />
-          </div>
+                  <div class="ratio ratio-16x9 bg-black bg-opacity-50">
+                    <img class="w-100 h-100 object-fit-cover" [src]="getCardImage(g)" [alt]="g.name" />
+                  </div>
 
-          <div class="card-body">
-            <h6 class="card-title mb-2 text-white text-truncate">{{ g.name }}</h6>
+                  <div class="card-body">
+                    <h6 class="card-title mb-2 text-white text-truncate">{{ g.name }}</h6>
 
-            <div class="d-flex flex-wrap gap-2 mb-2">
-              <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-              <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-              <!-- ใส่ tag อื่น ๆ ตามต้องการ -->
-            </div>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                      <span *ngFor="let cat of g?.categories"
+                        class="badge rounded-pill px-3 chip border border-white-10">{{ cat.category_name }}</span>
+                    </div>
 
-            <div class="d-flex align-items-center justify-content-between">
-              <span class="text-white-80 fw-semibold">
-                ฿{{ toPrice(g) }}
-              </span>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <span class="text-white-80 fw-semibold">
+                        ฿{{ toPrice(g) }}
+                      </span>
 
-              <div class="d-flex gap-2">
-                <a class="btn btn-soft rounded-3 border border-divider"
-                   >Details</a>
+                      <div class="d-flex gap-2">
+                        <a class="btn btn-soft rounded-3 border border-divider">Details</a>
 
-                <button type="button"
-                        class="btn btn-soft-strong rounded-3 border border-divider"
-                        (click)="addToCart(g)">
-                  Add
-                </button>
+                        <button type="button" class="btn btn-soft-strong rounded-3 border border-divider"
+                          (click)="addToCart(g)">
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-            </div>
+            </ng-container>
+
+            <!-- ว่าง/กำลังโหลด -->
+            <ng-template #emptyGrid>
+              <div class="col">
+                <div class="card card-dark rounded-4 border border-divider">
+                  <div class="card-body text-center text-secondary py-5">
+                    No games to display.
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
           </div>
-
         </div>
-      </div>
-    </ng-container>
-
-    <!-- ว่าง/กำลังโหลด -->
-    <ng-template #emptyGrid>
-      <div class="col">
-        <div class="card card-dark rounded-4 border border-divider">
-          <div class="card-body text-center text-secondary py-5">
-            No games to display.
-          </div>
-        </div>
-      </div>
-    </ng-template>
-
-  </div>
-</div>
 
       </div>
 

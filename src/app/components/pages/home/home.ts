@@ -4,6 +4,9 @@ import { GetGameResponse } from '../../models/res/get_games_res';
 import { GameResponse } from '../../models/res/games_res';
 import { CommonModule } from '@angular/common';
 import { GetGameImageResponse } from '../../models/res/get_gameImg_res';
+import { catchError, forkJoin, map, of, switchMap, tap } from 'rxjs';
+import { GameCategoryRes } from '../../models/res/get_game_category_res';
+
 
 @Component({
   selector: 'app-home',
@@ -28,19 +31,33 @@ export class Home implements OnInit {
 
   callApi() {
     const url = `${this.base}/api/game/`;
-    this.http.get<GetGameResponse>(url).subscribe({
-      next: (raw) => {
+
+    this.http.get<GetGameResponse>(url).pipe(
+      tap((raw) => {
         this.games = raw?.data ?? [];
         this.gamesFilted = this.games;
         this.topgame = this.games.find(g => Number(g.rank_score) === 1);
+      }),
+      switchMap(() => {
+        // รวมทุก API category เป็น array ของ observable
+        const categoryRequests = this.games.map(g =>
+          this.http.get<GameCategoryRes>(`${this.base}/api/game/${g.gid}/categories`)
+        );
+        // รวมทั้งหมดรันพร้อมกัน
+        return forkJoin(categoryRequests);
+      })
+    ).subscribe({
+      next: (categoriesArray) => {
+        // จัดการ category ให้ตรงกับแต่ละเกม
+        categoriesArray.forEach((cat, i) => {
+          this.games[i].categories = cat.categories;
+        });
 
-        console.log('Loaded games:', this.games);
-        console.log('Topgame:', this.topgame);
 
         this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('GET /api/game failed:', err);
+        console.error('❌ GET /api/game failed:', err);
       },
     });
   }
