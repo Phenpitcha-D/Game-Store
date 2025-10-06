@@ -65,11 +65,10 @@
                   <div class="card-body">
                     <h6 class="card-title mb-2 text-white text-truncate">{{ g.name }}</h6>
 
-            <div class="d-flex flex-wrap gap-2 mb-2">
-              <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-              <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-              <!-- ใส่ tag อื่น ๆ ตามต้องการ -->
-            </div>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                      <span *ngFor="let cat of g?.categories"
+                        class="badge rounded-pill px-3 chip border border-white-10">{{ cat.category_name }}</span>
+                    </div>
 
                     <div class="d-flex align-items-center justify-content-between">
                       <span class="text-white-80 fw-semibold">
