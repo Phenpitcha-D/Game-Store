@@ -7,6 +7,7 @@ import { TopSellers } from './components/pages/top-sellers/top-sellers';
 import { AdminManager } from './components/pages/admin-manager/admin-manager';
 import { ManageGame } from './components/pages/manage-game/manage-game';
 import { Admin } from './components/pages/admin/admin';
+import { UserTransactions } from './components/pages/user-transactions/user-transactions';
 
 export const routes: Routes = [
     { path : '', component: Home},
@@ -18,5 +19,6 @@ export const routes: Routes = [
         children: [
             { path: '', component: AdminManager },
             { path: 'manage-games', component: ManageGame },
+            { path: 'view-transactions', component: UserTransactions}, 
         ],},
 ];
