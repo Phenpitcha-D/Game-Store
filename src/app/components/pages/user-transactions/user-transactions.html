@@ -1,37 +1,43 @@
-<<div class="container py-4 py-lg-5">
+<div class="container py-4 py-lg-5">
   <div class="row g-4">
+
     <!-- LEFT: Transaction History -->
-    <div class="col-12 col-lg-8">
-      <div class="card glass rounded-4">
+    <div class="col-12 col-lg-8 h-panel">
+      <div class="card glass rounded-4 h-100 txn-scroll">
         <div class="card-body">
           <div class="h6 text-white fw-semibold mb-3">Transaction History</div>
 
-          <!-- empty state: ต้องเลือก user ก่อน -->
-          <div *ngIf="!selectedUser" class="empty d-flex flex-column align-items-center justify-content-center">
-            <i class="bi bi-clock-history fs-2 mb-2"></i>
-            <div class="text-secondary">Select a user on the right to view transactions</div>
-          </div>
+          <!-- มีผู้ใช้: แสดงรายการ -->
+          <ng-container *ngIf="selectedUser; else emptyState">
+            <div class="d-grid gap-3">
+              <!-- <div class="txn-pill d-flex align-items-center justify-content-between"
+                   *ngFor="let t of txnsForSelected">
+                <div class="text-white text-truncate me-3">{{ t.title }}</div>
+                <div class="text-secondary small flex-shrink-0">
+                  {{ t.date | date:'yyyy-MM-dd' }}
+                </div>
+              </div>
 
-          <!-- list -->
-          <div *ngIf="selectedUser" class="d-grid gap-3">
-            <div class="txn-pill d-flex align-items-center justify-content-between"
-                 *ngFor="let t of txnsForSelected">
-              <div class="text-white">{{ t.title }}</div>
-              <div class="text-secondary small">{{ t.date }}</div>
+              <div *ngIf="!txnsForSelected?.length" class="text-secondary">
+                No transactions for this user.
+              </div> -->
             </div>
+          </ng-container>
 
-            <!-- ไม่มีรายการ -->
-            <div *ngIf="txnsForSelected.length === 0" class="text-secondary">
-              No transactions for this user.
+          <!-- ยังไม่เลือกผู้ใช้ -->
+          <ng-template #emptyState>
+            <div class="empty d-flex flex-column align-items-center justify-content-center">
+              <i class="bi bi-clock-history fs-2 mb-2"></i>
+              <div class="text-secondary">Select a user on the right to view transactions</div>
             </div>
-          </div>
+          </ng-template>
         </div>
       </div>
     </div>
 
     <!-- RIGHT: Users -->
-    <div class="col-12 col-lg-4">
-      <div class="card glass rounded-4">
+    <div class="col-12 col-lg-4 h-panel">
+      <div class="card glass rounded-4 h-100 user-scroll">
         <div class="card-body">
           <div class="search mb-3">
             <div class="input-group input-group-lg">
@@ -40,19 +46,18 @@
             </div>
           </div>
 
-          <div class="d-grid gap-3">
-            <button type="button"
-                    class="user-row text-start"
-                    [class.active]="isSelected(u)"
-                    (click)="selectUser(u)"
-                    *ngFor="let u of filteredUsers">
+          <div class="d-grid gap-3 ">
+            <button type="button" class="user-row text-start" [class.active]="isSelected(u)" (click)="selectUser(u)"
+              *ngFor="let u of filteredUsers">
               <div class="d-flex align-items-center gap-3">
                 <div class="avatar">
-                  <img [src]="u.avatar" [alt]="u.name">
+                  <img [src]="u.img || 'assets/placeholder-avatar.jpg'" [alt]="u.username">
                 </div>
                 <div class="flex-grow-1 overflow-hidden">
-                  <div class="name text-truncate text-white">{{ u.name }}</div>
-                  <div class="sub text-secondary">Pay • {{ u.lastPay | currency:'THB':'symbol':'1.0-0' }}</div>
+                  <div class="name text-truncate text-white">{{ u.username }}</div>
+                  <div class="sub text-secondary">
+                    Pay • {{ (u.wallet_balance || 0) | currency:'THB':'symbol':'1.0-0' }}
+                  </div>
                 </div>
                 <span class="btn btn-chip">View</span>
               </div>
@@ -62,5 +67,6 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
