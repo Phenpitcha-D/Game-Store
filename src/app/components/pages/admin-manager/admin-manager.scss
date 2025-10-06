@@ -1,0 +1,22 @@
+/* glass cards */
+.glass{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* quick action chip buttons */
+.btn-chip{
+  background: rgba(255,255,255,.05);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 1rem;
+  padding: .55rem .9rem;
+}
+.btn-chip:hover,
+.btn-chip:focus{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+  color:#fff;
+}
