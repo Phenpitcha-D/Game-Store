@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Convert, User, UserLoginRespon } from '../../models/user_login_res';
+import { Convert, User, UserLoginRespon } from '../../models/res/user_login_res';
 import { Router } from '@angular/router';
 import { Constants } from '../../../config/constants';
 import { HttpClient, HttpClientModule } from '@angular/common/http';

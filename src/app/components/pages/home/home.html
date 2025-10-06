@@ -6,28 +6,24 @@
       <div class="row g-0 g-sm-3 align-items-stretch">
         <div class="col-md-6">
           <div class="hero-media">
-            <img alt="Hero" class="w-100 h-100 object-cover" src="https://picsum.photos/seed/hero1/1280/720" />
+            <img alt="Hero" class="w-100 h-100 object-cover" *ngIf="topgame" [src]="getCardImage(topgame)" />
           </div>
         </div>
         <div class="col-md-6">
           <div class="hero-body p-3 p-sm-4 h-100 d-flex flex-column justify-content-center">
-            <h2 class="h4 fw-bold mb-2 text-white">Death Stranding : Director’s cut</h2>
+            <h2 class="h4 fw-bold mb-2 text-white">{{topgame?.name}}</h2>
             <p class="small mb-3 text-muted-70">
-              Death Stranding is a 2019
-              <a class="link-light text-decoration-none opacity-75" href="#">action-adventure game</a>
-              developed by <a class="link-light text-decoration-none opacity-75" href="#">Kojima Productions</a>.
+              {{topgame?.description}}
+              developed by <a class="link-light text-decoration-none opacity-75" href="#">{{topgame?.developer}}</a>.
             </p>
             <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
               <span class="badge rounded-pill px-3 py-2 chip border">Single-player</span>
               <span class="badge rounded-pill px-3 py-2 chip border">Controller</span>
-              <span class="badge rounded-pill px-3 py-2 chip border">
-                <i class="bi bi-star-fill me-1 text-warning"></i>4.5
-              </span>
             </div>
             <div class="d-flex flex-wrap gap-2">
               <a class="btn btn-soft rounded-3 border border-divider" href="#">View Details</a>
               <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                <i class="bi bi-cart-plus me-2"></i>Add to Cart — ฿899
+                <i class="bi bi-cart-plus me-2"></i>Add to Cart — ฿{{topgame?.price}}
               </a>
             </div>
           </div>
@@ -52,147 +48,65 @@
         </div>
 
         <!-- GameCard Grid (เลื่อนเฉพาะส่วนนี้) -->
-        <div class="game-grid-scroll mt-3">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        <!-- GameCard Grid (เลื่อนเฉพาะส่วนนี้) -->
+<div class="game-grid-scroll mt-3">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
 
-            <!-- ===== Card Template (repeat) ===== -->
-            <div class="col">
-              <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
-                <div class="ratio ratio-16x9 bg-black bg-opacity-50">
-                  <img class="w-100 h-100 object-fit-cover" src="https://picsum.photos/seed/silent/960/540"
-                    alt="Silent Hill" />
-                </div>
-                <div class="card-body">
-                  <h6 class="card-title mb-2 text-white text-truncate">Silent Hill f</h6>
-                  <div class="d-flex flex-wrap gap-2 mb-2">
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <span class="text-white-80 fw-semibold">฿399</span>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-soft rounded-3 border border-divider">Details</a>
-                      <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                        Add
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <ng-container *ngIf="gamesFilted?.length; else emptyGrid">
+      <div class="col" *ngFor="let g of gamesFilted; trackBy: trackByGid">
+        <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
+
+          <div class="ratio ratio-16x9 bg-black bg-opacity-50">
+            <img class="w-100 h-100 object-fit-cover"
+                 [src]="getCardImage(g)"
+                 [alt]="g.name" />
+          </div>
+
+          <div class="card-body">
+            <h6 class="card-title mb-2 text-white text-truncate">{{ g.name }}</h6>
+
+            <div class="d-flex flex-wrap gap-2 mb-2">
+              <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
+              <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
+              <!-- ใส่ tag อื่น ๆ ตามต้องการ -->
             </div>
 
-            <!-- 2 -->
-            <div class="col">
-              <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
-                <div class="ratio ratio-16x9 bg-black bg-opacity-50">
-                  <img class="w-100 h-100 object-fit-cover" src="https://picsum.photos/seed/subway/960/540"
-                    alt="Subway Surfers" />
-                </div>
-                <div class="card-body">
-                  <h6 class="card-title mb-2 text-white text-truncate">Subway Surfers</h6>
-                  <div class="d-flex flex-wrap gap-2 mb-2">
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Cloud Save</span>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <span class="text-white-80 fw-semibold">฿599</span>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-soft rounded-3 border border-divider">Details</a>
-                      <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                        Add
-                      </a>
-                    </div>
-                  </div>
-                </div>
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="text-white-80 fw-semibold">
+                ฿{{ toPrice(g) }}
+              </span>
+
+              <div class="d-flex gap-2">
+                <a class="btn btn-soft rounded-3 border border-divider"
+                   >Details</a>
+
+                <button type="button"
+                        class="btn btn-soft-strong rounded-3 border border-divider"
+                        (click)="addToCart(g)">
+                  Add
+                </button>
               </div>
             </div>
+          </div>
 
-            <!-- 3 -->
-            <div class="col">
-              <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
-                <div class="ratio ratio-16x9 bg-black bg-opacity-50">
-                  <img class="w-100 h-100 object-fit-cover" src="https://picsum.photos/seed/minecraft/960/540"
-                    alt="Minecraft" />
-                </div>
-                <div class="card-body">
-                  <h6 class="card-title mb-2 text-white text-truncate">Minecraft</h6>
-                  <div class="d-flex flex-wrap gap-2 mb-2">
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Cloud Save</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Achievements</span>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <span class="text-white-80 fw-semibold">฿799</span>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-soft rounded-3 border border-divider">Details</a>
-                      <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                        Add
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+    </ng-container>
 
-            <!-- 4 -->
-            <div class="col">
-              <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
-                <div class="ratio ratio-16x9 bg-black bg-opacity-50">
-                  <img class="w-100 h-100 object-fit-cover" src="https://picsum.photos/seed/khazan/960/540"
-                    alt="Khazan" />
-                </div>
-                <div class="card-body">
-                  <h6 class="card-title mb-2 text-white text-truncate">The First Berserker: Khazan</h6>
-                  <div class="d-flex flex-wrap gap-2 mb-2">
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Cloud Save</span>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <span class="text-white-80 fw-semibold">฿899</span>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-soft rounded-3 border border-divider">Details</a>
-                      <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                        Add
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 5 -->
-            <div class="col">
-              <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
-                <div class="ratio ratio-16x9 bg-black bg-opacity-50">
-                  <img class="w-100 h-100 object-fit-cover" src="https://picsum.photos/seed/wukong/960/540"
-                    alt="Black Myth Wukong" />
-                </div>
-                <div class="card-body">
-                  <h6 class="card-title mb-2 text-white text-truncate">Black Myth: Wukong</h6>
-                  <div class="d-flex flex-wrap gap-2 mb-2">
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Single-player</span>
-                    <span class="badge rounded-pill px-3 chip border border-white-10">Controller</span>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <span class="text-white-80 fw-semibold">฿329</span>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-soft rounded-3 border border-divider">Details</a>
-                      <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                        Add
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- …การ์ดใบอื่น ๆ วางต่อได้ตามเดิม… -->
-
+    <!-- ว่าง/กำลังโหลด -->
+    <ng-template #emptyGrid>
+      <div class="col">
+        <div class="card card-dark rounded-4 border border-divider">
+          <div class="card-body text-center text-secondary py-5">
+            No games to display.
           </div>
         </div>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+
       </div>
 
       <!-- Right: Filters (sticky) -->

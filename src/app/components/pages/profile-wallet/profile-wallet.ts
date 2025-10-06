@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Convert, UserLoginRespon } from '../../models/user_login_res';
+import { Convert, UserLoginRespon } from '../../models/res/user_login_res';
 import { Router } from '@angular/router';
 
 type TxType = 'topup' | 'purchase';

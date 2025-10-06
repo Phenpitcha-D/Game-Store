@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
-import { Convert, UserLoginRespon } from '../../models/user_login_res';
+import { Convert, UserLoginRespon } from '../../models/res/user_login_res';
 
 type Mode = 'login' | 'register';
 

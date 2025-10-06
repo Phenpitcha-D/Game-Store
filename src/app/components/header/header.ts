@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, HostListener, Input } from '@angular/core
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Convert, UserLoginRespon } from '../models/user_login_res';
+import { Convert, UserLoginRespon } from '../models/res/user_login_res';
 
 @Component({
   selector: 'app-header',
