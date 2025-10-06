@@ -1,0 +1,112 @@
+/* glass container */
+.glass{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  color:#fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* input */
+.input-group .input-group-text,
+.input-group .form-control{
+  background: rgba(255,255,255,.05);
+  color:#e8e8e8;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.input-group .form-control::placeholder{ color:#9aa3b2; }
+
+/* left list items */
+.txn-pill{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: .9rem;
+  padding: .9rem 1.1rem;
+}
+.empty{ min-height: 200px; }
+
+/* right user rows */
+.user-row{
+  width:100%;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  border-radius: 1rem;
+  padding: .7rem .9rem;
+  transition: background .2s, border-color .2s;
+}
+.user-row:hover,
+.user-row.active{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+
+.avatar{
+  width:46px; height:46px; border-radius:50%; overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+.avatar img{ width:100%; height:100%; object-fit:cover; }
+
+.name{ font-weight: 600; }
+.sub{ font-size: .9rem; }
+
+/* chip button */
+.btn-chip{
+  background: rgba(255,255,255,.05);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius: .9rem;
+  padding: .35rem .75rem;
+}
+.btn-chip:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.18); }
+
+/* ===== Fixed height panel + internal scroll ===== */
+
+/* ให้การ์ดสองฝั่งสูงเท่ากันเสมอ แล้วซ่อนสกรอลล์ชั้นนอก */
+.h-panel{
+  height: clamp(420px, 60vh, 680px);
+  overflow: hidden;
+}
+
+/* ทำ body เป็นคอลัมน์ เพื่อให้พื้นที่ list ยืด-หดได้ */
+.card.h-panel .card-body{
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  height: 100%;
+}
+
+/* พื้นที่ list ที่เลื่อนจริง */
+.txn-scroll,
+.user-scroll{
+  flex: 1 1 auto;
+  min-height: 0;              /* สำคัญสำหรับ flex child ให้สกรอลล์ได้ */
+  overflow-y: auto;
+  padding-right: .25rem;      /* กันบังด้วยแถบสกรอลล์ */
+
+}
+
+/* empty state ให้กลางในพื้นที่สกรอลล์ */
+.empty{
+  height: 100%;
+  min-height: unset;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+/* สกอร์บาร์ให้เข้าธีมมืด */
+.txn-scroll, .user-scroll{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.25) rgba(255,255,255,.06);
+}
+.txn-scroll::-webkit-scrollbar,
+.user-scroll::-webkit-scrollbar{ width:10px; }
+.txn-scroll::-webkit-scrollbar-track,
+.user-scroll::-webkit-scrollbar-track{ background: rgba(255,255,255,.06); }
+.txn-scroll::-webkit-scrollbar-thumb,
+.user-scroll::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.25);
+  border-radius: 999px;
+}
+
+

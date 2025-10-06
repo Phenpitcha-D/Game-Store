@@ -1,0 +1,55 @@
+<div class="container py-4 py-lg-5">
+
+    <div class="row g-4 mb-3">
+        <div class="col-12 col-lg-4">
+            <div class="card glass rounded-4">
+                <div class="card-body">
+                    <div class="text-secondary mb-2 fw-semibold">Games</div>
+                    <div class="display-5 text-white fw-semibold">{{ stats.games }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="card glass rounded-4">
+                <div class="card-body">
+                    <div class="text-secondary mb-2 fw-semibold">Users</div>
+                    <div class="display-5 text-white fw-semibold">{{ stats.users }}</div>
+                </div>
+            </div>
+        </div>
+
+        a
+        <div class="col-12 col-lg-4">
+            <div class="card glass rounded-4">
+                <div class="card-body">
+                    <div class="text-secondary mb-2 fw-semibold">Sales (M)</div>
+                    <div class="display-5 text-white fw-semibold">{{ stats.salesM }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card glass rounded-4">
+        <div class="card-body">
+            <div class="fw-semibold text-white mb-3">Quick Actions</div>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-chip d-inline-flex align-items-center gap-2"
+                    routerLink="/adminmanager/manage-games">
+                    <i class="bi bi-tags"></i> Manage Games
+                </button>
+                <button class="btn btn-chip d-inline-flex align-items-center gap-2"
+                    routerLink="/adminmanager/view-transactions">
+                    <i class="bi bi-receipt"></i> View Transactions
+                </button>
+                <button class="btn btn-chip d-inline-flex align-items-center gap-2"
+                    routerLink="/adminmanager/edit-rankings">
+                    <i class="bi bi-trophy"></i> Edit Rankings
+                </button>
+            </div>
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+
+</div>
