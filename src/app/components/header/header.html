@@ -40,7 +40,7 @@
     <div class="ms-auto d-flex align-items-center justify-content-end gap-2" style="min-width:220px;">
       <!-- Cart: อยู่ก่อน profile และห่างกันเล็กน้อย -->
       <button type="button" class="btn btn-outline-light btn-sm rounded-pill position-relative me-1 navBtn"
-        (click)="goTo('cart')">
+        routerLink="/cart">
         <i class="bi bi-cart3 me-1"></i>
         <span *ngIf="cartCount && cartCount > 0"
           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">

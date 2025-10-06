@@ -8,6 +8,7 @@ import { AdminManager } from './components/pages/admin-manager/admin-manager';
 import { ManageGame } from './components/pages/manage-game/manage-game';
 import { Admin } from './components/pages/admin/admin';
 import { UserTransactions } from './components/pages/user-transactions/user-transactions';
+import { Cart } from './components/pages/cart/cart';
 
 export const routes: Routes = [
     { path : '', component: Home},
@@ -20,5 +21,8 @@ export const routes: Routes = [
             { path: '', component: AdminManager },
             { path: 'manage-games', component: ManageGame },
             { path: 'view-transactions', component: UserTransactions}, 
-        ],},
+        ],
+    },
+    { path : 'cart', component: Cart },
+    
 ];

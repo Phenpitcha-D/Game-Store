@@ -1,0 +1,69 @@
+<div class="container py-4 py-lg-5">
+    <div class="row g-4">
+
+        <!-- LEFT: Cart list (scroll inside) -->
+        <div class="col-12 col-lg-8">
+            <div class="card glass rounded-4 h-panel">
+                <div class="card-header bg-transparent border-0 pt-3 ps-4">
+                    <div class="h6 fw-semibold text-white m-0">Cart</div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="cart-scroll">
+
+                        <!-- <div class="cart-row" *ngFor="let i of cartItems; trackBy: trackCart">
+                            <div class="thumb">
+                                <img [src]="i.cover" [alt]="i.title" />
+                            </div>
+
+                            <div class="info flex-grow-1 overflow-hidden">
+                                <div class="title text-white text-truncate">{{ i.title }}</div>
+                                <div class="meta text-secondary small text-truncate">{{ i.genre }}</div>
+                            </div>
+
+                            <div class="price text-white fw-semibold flex-shrink-0">฿{{ i.price }}</div>
+                            <button type="button" class="btn btn-chip flex-shrink-0"
+                                (click)="removeItem(i)">Remove</button>
+                        </div>
+
+                        <div *ngIf="!cartItems?.length" class="empty text-secondary text-center">
+                            Your cart is empty.
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Summary (sticky) -->
+        <div class="col-12 col-lg-4">
+            <div class="card glass rounded-4 position-sticky summary-sticky" style="top: 88px;">
+                <div class="card-body">
+                    <div class="h6 fw-semibold text-white mb-3">Summary</div>
+
+                    <div class="d-flex justify-content-between text-secondary small mb-1">
+                        <span>Subtotal</span>
+                        <span>฿{{ 0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-secondary small mb-3">
+                        <span>Promo code</span>
+                        <span>-฿{{ 0 }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-white">Total</span>
+                        <span class="text-white fw-bold fs-5">฿{{ 0 }}</span>
+                    </div>
+
+                    <div class="input-group input-group-lg mb-2">
+                        <span class="input-group-text"><i class="bi bi-ticket-perforated"></i></span>
+                        <input class="form-control" placeholder="Enter promo (e.g., GAME50)">
+                    </div>
+
+                    <button
+                        class="btn btn-soft-strong w-100 rounded-3 border border-divider text-white">Checkout</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
