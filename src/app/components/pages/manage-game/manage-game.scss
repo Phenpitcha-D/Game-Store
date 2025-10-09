@@ -41,7 +41,7 @@
 }
 .dropzone i{ font-size:1.1rem; opacity:.9; }
 
-/* selected files */
+/* selected files (เดิม) */
 .file-badge{
   background: rgba(255,255,255,.10);
   border:1px solid rgba(255,255,255,.18);
@@ -72,3 +72,45 @@
   padding: .45rem .6rem;
 }
 .max-h-240{ max-height: 240px; }
+
+/* ✅ ใหม่: ชิปไฟล์พร้อมพรีวิวรูป */
+.file-chip{
+  display:inline-flex; align-items:center; gap:.5rem;
+  background: rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  border-radius:.8rem;
+  padding:.35rem .5rem .35rem .35rem;
+  max-width: 280px;
+}
+.file-chip .name{
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-thumb{
+  width:40px; height:40px; object-fit:cover; border-radius:.5rem;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+
+/* ✅ ชิปไฟล์ + พรีวิว */
+.file-chip{
+  display:inline-flex; align-items:center; gap:.5rem;
+  background: rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  border-radius:.8rem;
+  padding:.35rem .5rem .35rem .35rem;
+  max-width: 280px;
+}
+.file-chip.existing{ background: rgba(255,255,255,.06); } /* แยกสีเล็กน้อย */
+.file-chip .name{
+  max-width:170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.file-thumb{
+  width:40px; height:40px; object-fit:cover; border-radius:.5rem;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 1px 4px rgba(0,0,0,.25);
+}
