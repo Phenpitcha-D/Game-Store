@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { GetGameImageResponse } from '../../models/res/get_gameImg_res';
 import { catchError, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { GameCategoryRes } from '../../models/res/get_game_category_res';
+import { GetGameTypeRes } from '../../models/res/getGameType_res';
+import { GameTypeRes } from '../../models/res/gameType_res';
 
 
 @Component({
@@ -23,10 +25,13 @@ export class Home implements OnInit {
   gamesFilted: GameResponse[] = [];
   trackByGid = (_: number, g: GameResponse) => g.gid;
   imgUrl: string | undefined
+  CATEGORIES: GameTypeRes[] = [];
+  selectedTypeId: number | 'all' = 'all';
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef,) { }
   ngOnInit(): void {
     console.log('Start');
     this.callApi();
+    this.loadTypes();
   }
 
   callApi() {
@@ -61,6 +66,13 @@ export class Home implements OnInit {
       },
     });
   }
+
+  private loadTypes() {
+      this.http.get<GetGameTypeRes>(`${this.base}/api/game/types`).subscribe(res => {
+        this.CATEGORIES = res.data ?? [];
+        this.cdr.markForCheck();
+      });
+    }
   toPrice(g: GameResponse): number {
     return Number(g.price ?? 0);
   }
@@ -92,4 +104,68 @@ export class Home implements OnInit {
     // ระหว่างรอโหลดครั้งแรก → ใช้ fallback
     return fallback;
   }
+
+
+  // --- เลือกประเภท ---
+selectType(tid: number | 'all') {
+  this.selectedTypeId = tid;
+  this.applyFilters();
+}
+
+// --- กรองรายการเกมตามประเภทที่เลือก (และจะต่อยอดรวม keyword ได้) ---
+private applyFilters() {
+  let list = this.games ?? [];
+
+  if (this.selectedTypeId !== 'all') {
+    const selId = this.selectedTypeId as number;
+    const selName = this.normalize(this.getTypeNameById(selId) ?? '');
+
+    list = list.filter(g => {
+      const cats: any[] = g?.categories ?? [];
+      return cats.some(c => {
+        const cid = this.getCatId(c);
+        if (cid != null) return cid === selId; // กรณี API ใส่ tid/id มากับเกม
+        // fallback: เทียบชื่อ (กันกรณีได้แต่ชื่อ)
+        const cname = this.normalize(this.getCatName(c));
+        return selName && cname === selName;
+      });
+    });
+  }
+
+  this.gamesFilted = list;
+  this.cdr.markForCheck();
+}
+
+// ---------- helpers ----------
+getTypeId(t: any): number {
+  return typeof t?.tid === 'number'
+    ? t.tid
+    : (typeof t?.id === 'number' ? t.id : -1);
+}
+
+getTypeName(t: any): string {
+  return t?.type_name ?? t?.category_name ?? t?.name ?? '';
+}
+
+getTypeNameById(id: number): string | null {
+  const x = this.CATEGORIES.find(it => this.getTypeId(it) === id);
+  return x ? this.getTypeName(x) : null;
+}
+
+getCatId(c: any): number | null {
+  return typeof c?.tid === 'number'
+    ? c.tid
+    : (typeof c?.id === 'number' ? c.id : null);
+}
+
+getCatName(c: any): string {
+  return c?.category_name ?? c?.type_name ?? c?.name ?? '';
+}
+
+normalize(s: string): string {
+  return (s || '').toString().trim().toLowerCase();
+}
+
+// สำหรับ *ngFor trackBy
+trackByType = (_: number, t: any) => this.getTypeId(t) ?? this.getTypeName(t);
 }

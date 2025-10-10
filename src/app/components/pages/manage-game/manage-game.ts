@@ -147,7 +147,6 @@ export class ManageGame implements OnInit {
     fd.append('description', String(v.desc ?? '').trim());
     if (v.released_at) fd.append('released_at', String(v.released_at));
     fd.append('developer', String(v.dev ?? '').trim());
-    fd.append('rank_score', String(v.rank_score ?? 0));
     fd.append('categories', categoriesCSV);
     // ✅ รูปที่ถูก mark เพื่อลบ
     if (this.editingId && this.deleteImageIds.length) {

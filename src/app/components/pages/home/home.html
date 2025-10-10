@@ -1,5 +1,6 @@
-<body class="bg-black text-light layout-root">
-  <main class="container-xxl my-4 flex-grow-1">
+<div class="text-light layout-root">
+
+  <div class="container-xxl my-4 flex-grow-1">
 
     <!-- Hero -->
     <div class="card hero-card card-dark surface-gradient rounded-4 mb-4 border border-divider overflow-hidden">
@@ -92,9 +93,9 @@
 
             <!-- ว่าง/กำลังโหลด -->
             <ng-template #emptyGrid>
-              <div class="col">
+              <div class="col-12 col-md-8 col-lg-6 mx-auto">
                 <div class="card card-dark rounded-4 border border-divider">
-                  <div class="card-body text-center text-secondary py-5">
+                  <div class="card-body text-secondary empty-center text-center">
                     No games to display.
                   </div>
                 </div>
@@ -112,19 +113,23 @@
           <div class="card-body">
             <div class="h6 fw-semibold mb-3 text-white">Filters</div>
 
+            <!-- Category -->
             <div class="mb-3">
               <div class="small mb-2" style="color:rgba(255, 255, 255, 0.7)">Category</div>
+
               <div class="d-flex flex-wrap gap-2">
-                <button type="button"
-                  class="badge rounded-pill px-3 py-2 chip border cursor-pointer active-chip">All</button>
-                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer">Action</button>
-                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer">RPG</button>
-                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer">Indie</button>
-                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer">Strategy</button>
-                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer">Adventure</button>
-                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer">Sports</button>
-                <button type="button"
-                  class="badge rounded-pill px-3 py-2 chip border cursor-pointer">Simulation</button>
+                <!-- All -->
+                <button type="button" class="badge rounded-pill px-3 py-2 chip border cursor-pointer"
+                  [class.active-chip]="selectedTypeId==='all'" (click)="selectType('all')">
+                  All
+                </button>
+
+                <!-- Dynamic categories -->
+                <button *ngFor="let t of CATEGORIES; trackBy: trackByType" type="button"
+                  class="badge rounded-pill px-3 py-2 chip border cursor-pointer"
+                  [class.active-chip]="(getTypeId(t) === selectedTypeId)" (click)="selectType(getTypeId(t))">
+                  {{ getTypeName(t) }}
+                </button>
               </div>
             </div>
 
@@ -144,19 +149,5 @@
       </div>
 
     </div>
-
-
-    <!-- Footer -->
-    <div class="text-center text-secondary small mt-5 pt-4">
-      Designed in epic style, powered by Bootstrap 5 • Mini Project Mockups •
-      <a class="text-decoration-none link-light opacity-75" href="#">Store</a> ·
-      <a class="text-decoration-none link-light opacity-75" href="#">Details</a> ·
-      <a class="text-decoration-none link-light opacity-75" href="#">Cart/Checkout</a> ·
-      <a class="text-decoration-none link-light opacity-75" href="#">Library</a> ·
-      <a class="text-decoration-none link-light opacity-75" href="#">Profile/Wallet</a>
-    </div>
-  </main>
-
-  <!-- ไม่มี footer ที่นี่ ใช้ <app-footer> ภายนอกเลย์เอาต์หลักแทน -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </div>
+</div>
