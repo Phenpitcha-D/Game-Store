@@ -9,6 +9,7 @@ import { ManageGame } from './components/pages/manage-game/manage-game';
 import { Admin } from './components/pages/admin/admin';
 import { UserTransactions } from './components/pages/user-transactions/user-transactions';
 import { Cart } from './components/pages/cart/cart';
+import { GameDetail } from './components/pages/game-detail/game-detail';
 
 export const routes: Routes = [
     { path : '', component: Home},
@@ -24,5 +25,6 @@ export const routes: Routes = [
         ],
     },
     { path : 'cart', component: Cart },
-    
+    { path : 'game-detail', component: GameDetail },
+    // { path : 'game-details/:id', component: GameDetail },
 ];

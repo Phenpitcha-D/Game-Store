@@ -1,0 +1,90 @@
+<div class="container py-4 py-lg-5 details-page">
+    <div class="row g-4">
+        <!-- LEFT: Main card -->
+        <div class="col-12 col-lg-8">
+            <div class="card glass rounded-4 overflow-hidden">
+                <!-- Hero -->
+                <div class="hero ratio ratio-21x9">
+                    <img [src]="game?.hero || fallbackHero" alt="hero">
+                </div>
+
+                <div class="card-body">
+                    <!-- Title + rating -->
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h2 class="h4 fw-bold text-white mb-0">
+                            {{ game?.name || 'Death Stranding : Director’s cut' }}
+                        </h2>
+                        <div class="d-flex align-items-center gap-2 text-white">
+                            <i class="bi bi-star-fill"></i>
+                            <span>{{ game?.rating || 4.0 }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge chip">Single-player</span>
+                        <span class="badge chip">Controller</span>
+                        <span class="badge chip">Cloud Save</span>
+                        <!-- หรือ *ngFor="let t of game?.tags" -->
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-white-75 mb-3">
+                        {{ game?.description || 'Death Stranding is an action-adventure game developed by Kojima
+                        Productions...' }}
+                    </p>
+
+                    <!-- Gallery -->
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6" *ngFor="let img of (game?.gallery || gallery)">
+                            <div class="thumb ratio ratio-16x9">
+                                <img [src]="img" alt="screenshot">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Purchase + Details -->
+        <div class="col-12 col-lg-4">
+            <!-- Purchase -->
+            <div class="card glass rounded-4 mb-3">
+                <div class="card-body">
+                    <div class="h6 fw-semibold text-white mb-3">Purchase</div>
+
+                    <div class="display-6 fw-semibold text-white mb-3">
+                        ฿{{ game?.price || 599 }}
+                    </div>
+
+                    <button type="button" class="btn btn-soft w-100 rounded-3 mb-2" (click)="addToCart(game)">
+                        Add to Cart
+                    </button>
+                    <button type="button" class="btn btn-soft-strong w-100 rounded-3" (click)="buyNow(game)">
+                        Buy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="card glass rounded-4">
+                <div class="card-body">
+                    <div class="h6 fw-semibold text-white mb-3">Details</div>
+                    <dl class="row g-2 small mb-0">
+                        <dt class="col-5 text-secondary">RELEASE DATE:</dt>
+                        <dd class="col-7 text-white">
+                            {{ game?.release || ('30 Mar, 2022') }}
+                        </dd>
+
+                        <dt class="col-5 text-secondary">DEVELOPER:</dt>
+                        <dd class="col-7">
+                            <a class="link-light text-decoration-none opacity-75" href="#">
+                                {{ game?.developer || 'KOJIMA PRODUCTIONS' }}
+                            </a>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
