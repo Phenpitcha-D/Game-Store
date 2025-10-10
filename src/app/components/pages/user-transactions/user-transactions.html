@@ -10,17 +10,16 @@
           <!-- มีผู้ใช้: แสดงรายการ -->
           <ng-container *ngIf="selectedUser; else emptyState">
             <div class="d-grid gap-3">
-              <!-- <div class="txn-pill d-flex align-items-center justify-content-between"
-                   *ngFor="let t of txnsForSelected">
-                <div class="text-white text-truncate me-3">{{ t.title }}</div>
+              <div class="txn-pill d-flex align-items-center justify-content-between" *ngFor="let t of data!.data">
+                <div class="text-white text-truncate me-3">{{ t.note }}</div>
                 <div class="text-secondary small flex-shrink-0">
-                  {{ t.date | date:'yyyy-MM-dd' }}
+                  {{ t.created_at| date:'yyyy-MM-dd' }}
                 </div>
               </div>
 
-              <div *ngIf="!txnsForSelected?.length" class="text-secondary">
+              <div *ngIf="!data?.data?.length" class="text-secondary">
                 No transactions for this user.
-              </div> -->
+              </div>
             </div>
           </ng-container>
 

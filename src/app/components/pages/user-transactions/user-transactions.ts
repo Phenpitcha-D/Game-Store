@@ -6,6 +6,7 @@ import { Convert, User, UserLoginRespon } from '../../models/res/user_login_res'
 import { Constants } from '../../../config/constants';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { WalletTransactions } from '../../models/res/getWalletTrans';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class UserTransactions implements OnInit {
 
     currentUser: UserLoginRespon | undefined;
     allUsers: User[] = [];
+    data: WalletTransactions | undefined;
+
 
   constructor(
     private http: HttpClient,
@@ -71,7 +74,6 @@ private loadAllUsers() {
   });
   }
 
-  // state
   selectedUser?: User;
   q = new FormControl<string>('', { nonNullable: true });
 
@@ -81,6 +83,29 @@ private loadAllUsers() {
     return this.allUsers.filter(u => u.username.toLowerCase().includes(s));
   }
 
-  selectUser(u: User) { this.selectedUser = u; }
+  selectUser(u: User) { 
+    this.selectedUser = u.uid ? u : undefined;
+    this.getTransactionsByUID(String(u.uid));
+  }
+
   isSelected(u: User) { return this.selectedUser?.uid === u.uid; }
+  
+  private getTransactionsByUID(uid: string) {
+    if (!uid) return;
+    const token = this.currentUser?.token?.trim();
+    const useBearer = !!token;
+    const headers = useBearer ? { Authorization: `Bearer ${token}` } : undefined;
+
+    this.http.get<WalletTransactions>(`${this.constants.API_ENDPOINT}/api/wallet/transactions/${uid}?sort=desc`, { headers }).subscribe({
+      next: (res) => {
+        console.log('GET /api/transactions/:uid success:', res);
+        this.data = res;
+      },
+      error: (e) => {
+        console.error('GET /api/transactions/:uid failed:', e?.status, e?.error || e);
+      }
+    });
+  }
+
+
 }
