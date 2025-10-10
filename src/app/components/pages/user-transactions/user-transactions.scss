@@ -63,7 +63,7 @@
 
 /* ให้การ์ดสองฝั่งสูงเท่ากันเสมอ แล้วซ่อนสกรอลล์ชั้นนอก */
 .h-panel{
-  height: clamp(420px, 60vh, 680px);
+  height: clamp(500px, 72vh, 750px);
   overflow: hidden;
 }
 
