@@ -83,3 +83,66 @@ h1, h2, h3, h4, h5, h6 { color: #fff; }
 /* แท็กวันที่ให้ขาวด้วย */
 .date-tag { color: #fff; }
 
+/* กล่องว่างเมื่อไม่มีรายการ */
+.tx-empty{
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+/* ===== Panel สูงคงที่ + สกรอลล์ภายในการ์ด ===== */
+.h-panel{
+  /* ให้สองใบสูงเท่ากันประมาณรูป */
+  height: clamp(380px, 52vh, 560px);
+  overflow: hidden; /* ซ่อนสกรอลล์ชั้นนอก */
+}
+
+.card.h-panel .card-body{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tx-scroll{
+  flex: 1 1 auto;
+  min-height: 0;          /* สำคัญ ให้ลูกใน flex สกรอลล์ได้ */
+  overflow-y: auto;
+  padding-right: .25rem;  /* กันบังด้วยสกรอลล์บาร์ */
+}
+
+/* ===== แถวธุรกรรม (โทนและมิติแบบภาพ) ===== */
+.tx-row{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: .9rem;
+  padding: .9rem 1.1rem;
+}
+.tx-row i{ opacity:.9; }
+
+/* ป้ายจำนวนเงิน */
+.amount-badge{
+  /* ใช้สีตัวอักษรเขียว/แดงผ่านคลาส text-success / text-danger ตามเงื่อนไข */
+  font-variant-numeric: tabular-nums; /* จัดหลักสวยขึ้น */
+}
+
+/* กล่องว่างเมื่อไม่มีรายการ */
+.tx-empty{
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+/* ===== Scrollbar ให้เข้าธีมมืด ===== */
+.tx-scroll{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.25) rgba(255,255,255,.06);
+}
+.tx-scroll::-webkit-scrollbar{ width:10px; }
+.tx-scroll::-webkit-scrollbar-track{ background: rgba(255,255,255,.06); }
+.tx-scroll::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.25);
+  border-radius: 999px;
+}
+

@@ -1,46 +1,51 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Convert, UserLoginRespon } from '../../models/res/user_login_res';
 import { Router } from '@angular/router';
+import { HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
+import { Constants } from '../../../config/constants';
+import { WalletTransactions } from '../../models/res/getWalletTrans';
 
-type TxType = 'topup' | 'purchase';
-interface Tx { type: TxType; title: string; amount: number; date: string; }
+export interface GetBalanceRes {
+    success: boolean;
+    uid:     number;
+    balance: number;
+}
 
 @Component({
   selector: 'app-profile-wallet',
   templateUrl: './profile-wallet.html',
   styleUrls: ['./profile-wallet.scss'],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
 })
 export class ProfileWallet implements OnInit {
-  // ใส่ไว้ในคลาส component
-defaultAvatar = 'https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg';
+  defaultAvatar = 'https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg';
+  
+  form!: FormGroup;
+  quick = [100, 200, 500];
+  walletBalance: number = 0;
+  data: WalletTransactions | undefined;
 
   currentUser: UserLoginRespon | undefined;
   private onAuthChanged = () => {
     this.loadUser();
+    this.loadWallet();
     this.cdr.markForCheck();
   };
 
-
-  balance = 1250;
-  quick = [100, 200, 500];
-
-  txs: Tx[] = [
-    { type: 'topup',    title: 'Top-up ฿500',                         amount: +500,  date: '2025-09-20' },
-    { type: 'purchase', title: 'Purchase: Nightfall Protocol – ฿599', amount: -599,  date: '2025-09-21' },
-    { type: 'topup',    title: 'Top-up ฿200',                         amount: +200,  date: '2025-09-22' },
-  ];
-
-  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef, private fb: FormBuilder, private http: HttpClient, private constants: Constants) {}
 
   ngOnInit(): void {
     this.loadUser();
-    // ฟังเหตุการณ์เปลี่ยนสถานะล็อกอินจากทุกที่
+    this.loadWallet();
+    this.getWalletTransactions();
     window.addEventListener('auth-changed', this.onAuthChanged);
-    window.addEventListener('storage', this.onAuthChanged); // เผื่อหลายแท็บ
+    window.addEventListener('storage', this.onAuthChanged);
+    this.form = this.fb.group({
+      customAmount: [null, [Validators.required, Validators.min(1)]]
+    });
   }
 
   private loadUser() {
@@ -52,15 +57,77 @@ defaultAvatar = 'https://st4.depositphotos.com/14953852/22772/v/450/depositphoto
       } catch {
         this.currentUser = undefined;
       }
+  }
+
+  private loadWallet() {
+    if (!this.currentUser) return;
+    const token = this.currentUser?.token ?? localStorage.getItem('auth_token') ?? '';
+    const baseHeaders = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+    let options = { headers: baseHeaders };
+
+    this.http.get<GetBalanceRes>(`${this.constants.API_ENDPOINT}/api/wallet/balance`, options)
+      .subscribe({
+        next: (res) => {
+          if (res.success && this.currentUser) {
+            this.walletBalance = res.balance;
+          }
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error('Failed to load wallet:', err);
+        }
+      });
+  }
+
+  topup(amount?: number) {
+    if (amount) {
+      this.sendTopup(amount);
+      console.log('Topup amount = ', amount);
+      return;
     }
 
-  topup(n: number) {
-    this.balance += n;
-    this.txs.unshift({
-      type: 'topup',
-      title: `Top-up ฿${n}`,
-      amount: +n,
-      date: new Date().toISOString().slice(0, 10),
-    });
+    const customAmount = this.form.value.customAmount;
+    if (!customAmount || customAmount <= 0) {
+      alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
+      console.error('Invalid custom amount:', customAmount);
+      return;
+    }
+
+    this.sendTopup(customAmount);
   }
+
+  private sendTopup(amount: number) {
+    console.log('Topup amount = ', amount);
+
+    const body = { amount, note: 'Top-up' };
+    const token = this.currentUser?.token ?? localStorage.getItem('auth_token') ?? '';
+    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+
+    this.http.post(`${this.constants.API_ENDPOINT}/api/wallet/topup`, body, { headers })
+      .subscribe({
+        // next: (res) => alert('เติมเงินสำเร็จ: ' + amount),
+        error: (err) => alert('เกิดข้อผิดพลาด')
+      });
+      window.dispatchEvent(new Event('auth-changed'));
+      this.cdr.markForCheck();
+  }
+
+  private getWalletTransactions() {
+    if (!this.currentUser) return;
+    const token = this.currentUser?.token ?? localStorage.getItem('auth_token') ?? '';
+    const baseHeaders = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+    let options = { headers: baseHeaders };
+
+    this.http.get<WalletTransactions>(`${this.constants.API_ENDPOINT}/api/wallet/transactions?sort=desc`, options)
+      .subscribe({
+        next: (res) => {
+          console.log('Wallet transactions:', res);
+          this.data = res;
+        },
+        error: (err) => {
+          console.error('Failed to load wallet transactions:', err);
+        }
+      });
+  }
+
 }

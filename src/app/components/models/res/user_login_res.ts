@@ -20,7 +20,7 @@ export interface User {
     email:          string;
     img:            string;
     role:           string;
-    wallet_balance: string;
+    wallet_balance: number;
     created_at:     string;
 }
 

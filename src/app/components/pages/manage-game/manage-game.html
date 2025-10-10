@@ -3,7 +3,7 @@
 
     <!-- ซ้าย: ฟอร์ม -->
     <div class="col-12 col-lg-7">
-      <div class="card glass rounded-4">
+      <div class="card glass rounded-4 h-panel">
         <div class="card-body">
           <div class="h6 text-white fw-semibold mb-2">Add / Edit Game</div>
 
@@ -15,147 +15,152 @@
             </div>
           </div>
 
-          <form [formGroup]="form" (ngSubmit)="save()" novalidate>
-            <div class="row g-3">
-              <div class="col-12 col-md-7">
-                <label class="form-label text-secondary small">Title</label>
-                <input class="form-control form-control-lg" placeholder="Game title" formControlName="title"
-                  [disabled]="isSubmitting">
-              </div>
-              <div class="col-12 col-md-5">
-                <label class="form-label text-secondary small">Price (THB)</label>
-                <input type="number" class="form-control form-control-lg" placeholder="599" formControlName="price"
-                  min="0" [disabled]="isSubmitting">
-              </div>
+          <div class="games-scroll">
+            <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+              <div class="row g-3">
+                <div class="col-12 col-md-7">
+                  <label class="form-label text-secondary small">Title</label>
+                  <input class="form-control form-control-lg" placeholder="Game title" formControlName="title"
+                    [disabled]="isSubmitting">
+                </div>
+                <div class="col-12 col-md-5">
+                  <label class="form-label text-secondary small">Price (THB)</label>
+                  <input type="number" class="form-control form-control-lg" placeholder="599" formControlName="price"
+                    min="0" [disabled]="isSubmitting">
+                </div>
 
-              <div class="col-12">
-                <label class="form-label text-secondary small">Category</label>
+                <div class="col-12">
+                  <label class="form-label text-secondary small">Category</label>
 
-                <div class="dropdown w-100" data-bs-auto-close="outside">
-                  <button type="button"
-                    class="form-control form-control-lg d-flex align-items-center justify-content-between dropdown-toggle text-start"
-                    data-bs-toggle="dropdown" [disabled]="isSubmitting">
-                    <ng-container *ngIf="selectedCats.length; else catPlaceholder">
-                      <span class="d-flex flex-wrap gap-2">
-                        <span class="badge tag-badge" *ngFor="let c of selectedCats; let i = index">
-                          {{ c.name }}
-                          <button type="button" class="btn-close btn-close-white ms-1" (click)="removeCat(i)"
-                            [disabled]="isSubmitting"></button>
+                  <div class="dropdown w-100" data-bs-auto-close="outside">
+                    <button type="button"
+                      class="form-control form-control-lg d-flex align-items-center justify-content-between dropdown-toggle text-start"
+                      data-bs-toggle="dropdown" [disabled]="isSubmitting">
+                      <ng-container *ngIf="selectedCats.length; else catPlaceholder">
+                        <span class="d-flex flex-wrap gap-2">
+                          <span class="badge tag-badge" *ngFor="let c of selectedCats; let i = index">
+                            {{ c.name }}
+                            <button type="button" class="btn-close btn-close-white ms-1" (click)="removeCat(i)"
+                              [disabled]="isSubmitting"></button>
+                          </span>
                         </span>
-                      </span>
+                      </ng-container>
+                      <ng-template #catPlaceholder>Action / RPG / …</ng-template>
+                    </button>
+
+                    <ul class="dropdown-menu w-100 dropdown-menu-dark max-h-240 overflow-auto">
+                      <li *ngFor="let c of CATEGORIES">
+                        <button type="button" class="dropdown-item d-flex align-items-center gap-2"
+                          [class.active]="isSelected(c.tid)" (click)="toggleCat(c)" [disabled]="isSubmitting">
+                          <i class="bi" [ngClass]="isSelected(c.tid) ? 'bi-check2-circle' : 'bi-circle'"></i>
+                          {{ c.name }}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label text-secondary small">Developer</label>
+                  <input class="form-control form-control-lg" placeholder="Hokima / Sarayut / Phenpitcha / …"
+                    formControlName="dev" [disabled]="isSubmitting">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label text-secondary small">Description</label>
+                  <input class="form-control form-control-lg" placeholder="Short description" formControlName="desc"
+                    [disabled]="isSubmitting">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label text-secondary small">Upload Images</label>
+
+                  <div class="dropzone" (drop)="onDrop($event)" (dragover)="onDragOver($event)">
+                    <div class="dz-inner">
+                      <i class="bi bi-cloud-arrow-up"></i>
+                      <span>Drag & drop cover/banner (file upload only)</span>
+                      <button class="btn btn-chip ms-2" type="button" (click)="onBrowse(fileInput)"
+                        [disabled]="isSubmitting">Browse</button>
+                    </div>
+                    <input #fileInput class="d-none" type="file" multiple accept="image/*"
+                      (change)="onFileInput($event)">
+                  </div>
+
+                  <!-- ✅ พรีวิวรูปเดิมจากเซิร์ฟเวอร์ (กดลบ = mark เพื่อลบตอน Save) -->
+                  <div *ngIf="existingImages.length" class="mt-2 d-flex flex-wrap gap-2">
+                    <div class="file-chip existing" *ngFor="let img of existingImages; let i = index" [title]="img.url">
+                      <img class="file-thumb" [src]="img.url" alt="image">
+                      <span class="name text-truncate">{{ fileNameFromUrl(img.url) || ('image #' + img.imgid) }}</span>
+                      <button type="button" class="btn-close btn-close-white ms-1" (click)="removeExistingImage(i)"
+                        [disabled]="isSubmitting"></button>
+                    </div>
+                  </div>
+
+                  <!-- ✅ พรีวิวไฟล์ใหม่ที่เพิ่งเลือก -->
+                  <div *ngIf="droppedFiles.length" class="mt-2 d-flex flex-wrap gap-2">
+                    <div class="file-chip" *ngFor="let f of droppedFiles; let i = index" [title]="f.name">
+                      <img *ngIf="filePreviews[i]" class="file-thumb" [src]="filePreviews[i]!" [alt]="f.name">
+                      <span class="name text-truncate">{{ f.name }}</span>
+                      <button type="button" class="btn-close btn-close-white ms-1" (click)="removeFile(i)"
+                        [disabled]="isSubmitting"></button>
+                    </div>
+                  </div>
+
+                  <div class="form-text mt-1 text-secondary">* Upload via API (no direct URL from client)</div>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-chip" type="submit" [disabled]="isSubmitting || form.invalid">
+                    <ng-container *ngIf="!isSubmitting; else savingTpl">
+                      {{ editingId ? 'Save' : 'Add' }}
                     </ng-container>
-                    <ng-template #catPlaceholder>Action / RPG / …</ng-template>
+                    <ng-template #savingTpl>
+                      <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                      Processing...
+                    </ng-template>
                   </button>
 
-                  <ul class="dropdown-menu w-100 dropdown-menu-dark max-h-240 overflow-auto">
-                    <li *ngFor="let c of CATEGORIES">
-                      <button type="button" class="dropdown-item d-flex align-items-center gap-2"
-                        [class.active]="isSelected(c.tid)" (click)="toggleCat(c)" [disabled]="isSubmitting">
-                        <i class="bi" [ngClass]="isSelected(c.tid) ? 'bi-check2-circle' : 'bi-circle'"></i>
-                        {{ c.name }}
-                      </button>
-                    </li>
-                  </ul>
+                  <button class="btn btn-chip" type="button" (click)="remove()"
+                    [disabled]="!editingId || isSubmitting">Delete</button>
+                  <button class="btn btn-chip" type="button" (click)="clear()" [disabled]="isSubmitting">Clear</button>
                 </div>
               </div>
-
-              <div class="col-12">
-                <label class="form-label text-secondary small">Developer</label>
-                <input class="form-control form-control-lg" placeholder="Hokima / Sarayut / Phenpitcha / …"
-                  formControlName="dev" [disabled]="isSubmitting">
-              </div>
-
-              <div class="col-12">
-                <label class="form-label text-secondary small">Description</label>
-                <input class="form-control form-control-lg" placeholder="Short description" formControlName="desc"
-                  [disabled]="isSubmitting">
-              </div>
-
-              <div class="col-12">
-                <label class="form-label text-secondary small">Upload Images</label>
-
-                <div class="dropzone" (drop)="onDrop($event)" (dragover)="onDragOver($event)">
-                  <div class="dz-inner">
-                    <i class="bi bi-cloud-arrow-up"></i>
-                    <span>Drag & drop cover/banner (file upload only)</span>
-                    <button class="btn btn-chip ms-2" type="button" (click)="onBrowse(fileInput)"
-                      [disabled]="isSubmitting">Browse</button>
-                  </div>
-                  <input #fileInput class="d-none" type="file" multiple accept="image/*" (change)="onFileInput($event)">
-                </div>
-
-                <!-- ✅ พรีวิวรูปเดิมจากเซิร์ฟเวอร์ (กดลบ = mark เพื่อลบตอน Save) -->
-                <div *ngIf="existingImages.length" class="mt-2 d-flex flex-wrap gap-2">
-                  <div class="file-chip existing" *ngFor="let img of existingImages; let i = index" [title]="img.url">
-                    <img class="file-thumb" [src]="img.url" alt="image">
-                    <span class="name text-truncate">{{ fileNameFromUrl(img.url) || ('image #' + img.imgid) }}</span>
-                    <button type="button" class="btn-close btn-close-white ms-1"
-                      (click)="removeExistingImage(i)" [disabled]="isSubmitting"></button>
-                  </div>
-                </div>
-
-                <!-- ✅ พรีวิวไฟล์ใหม่ที่เพิ่งเลือก -->
-                <div *ngIf="droppedFiles.length" class="mt-2 d-flex flex-wrap gap-2">
-                  <div class="file-chip" *ngFor="let f of droppedFiles; let i = index" [title]="f.name">
-                    <img *ngIf="filePreviews[i]" class="file-thumb" [src]="filePreviews[i]!" [alt]="f.name">
-                    <span class="name text-truncate">{{ f.name }}</span>
-                    <button type="button" class="btn-close btn-close-white ms-1"
-                      (click)="removeFile(i)" [disabled]="isSubmitting"></button>
-                  </div>
-                </div>
-
-                <div class="form-text mt-1 text-secondary">* Upload via API (no direct URL from client)</div>
-              </div>
-
-              <div class="col-12 d-flex gap-2">
-                <button class="btn btn-chip" type="submit" [disabled]="isSubmitting || form.invalid">
-                  <ng-container *ngIf="!isSubmitting; else savingTpl">
-                    {{ editingId ? 'Save' : 'Add' }}
-                  </ng-container>
-                  <ng-template #savingTpl>
-                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                    Processing...
-                  </ng-template>
-                </button>
-
-                <button class="btn btn-chip" type="button" (click)="remove()"
-                  [disabled]="!editingId || isSubmitting">Delete</button>
-                <button class="btn btn-chip" type="button" (click)="clear()" [disabled]="isSubmitting">Clear</button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- ขวา: รายการเกม -->
     <div class="col-12 col-lg-5">
-      <div class="card glass rounded-4">
-        <div class="card-body">
+      <div class="card glass rounded-4 h-panel">
+        <div class="card-body d-flex flex-column">
           <div class="h6 text-white fw-semibold mb-3">Games</div>
 
-          <div class="d-grid gap-3">
-            <div class="game-row" *ngFor="let g of games">
-              <div class="d-flex align-items-center gap-3">
-                <div class="thumb">
-                  <img
-                    [src]="(g.images && g.images.length ? g.images[0].url : ('https://picsum.photos/seed/' + g.gid + '/960/540'))"
-                    [alt]="g.name" />
-                </div>
-                <div class="flex-grow-1 overflow-hidden">
-                  <div class="title text-truncate">{{ g.name }}</div>
-                  <div class="sub text-secondary">
-                    <ng-container *ngIf="g.categories?.length; else noCat">
-                      <ng-container *ngFor="let c of (g.categories | slice:0:3); let last = last">
-                        {{ c.category_name }}<ng-container *ngIf="!last">, </ng-container>
-                      </ng-container>
-                      <ng-container *ngIf="g.categories.length > 3">, …</ng-container>
-                      • {{ g.price | number:'1.0-0' }} ฿
-                    </ng-container>
-                    <ng-template #noCat>Uncategorized • {{ g.price | number:'1.0-0' }} ฿</ng-template>
+          <div class="games-scroll">
+            <div class="d-grid gap-3">
+              <div class="game-row" *ngFor="let g of games">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="thumb">
+                    <img
+                      [src]="(g.images && g.images.length ? g.images[0].url : ('https://picsum.photos/seed/' + g.gid + '/960/540'))"
+                      [alt]="g.name" />
                   </div>
+                  <div class="flex-grow-1 overflow-hidden">
+                    <div class="title text-truncate">{{ g.name }}</div>
+                    <div class="sub text-secondary">
+                      <ng-container *ngIf="g.categories?.length; else noCat">
+                        <ng-container *ngFor="let c of (g.categories | slice:0:3); let last = last">
+                          {{ c.category_name }}<ng-container *ngIf="!last">, </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="g.categories.length > 3">, …</ng-container>
+                        • {{ g.price | number:'1.0-0' }} ฿
+                      </ng-container>
+                      <ng-template #noCat>Uncategorized • {{ g.price | number:'1.0-0' }} ฿</ng-template>
+                    </div>
+                  </div>
+                  <button class="btn btn-chip" type="button" (click)="edit(g)" [disabled]="isSubmitting">Edit</button>
                 </div>
-                <button class="btn btn-chip" type="button" (click)="edit(g)" [disabled]="isSubmitting">Edit</button>
               </div>
             </div>
           </div>

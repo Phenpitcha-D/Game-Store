@@ -14,18 +14,20 @@
     </div>
 
     <!-- สองคอลัมน์ -->
+    <!-- สองคอลัมน์ -->
     <div class="row g-4">
+
         <!-- Wallet Balance -->
         <div class="col-12 col-lg-6">
-            <div class="card glass rounded-4">
-                <div class="card-body">
+            <div class="card glass rounded-4 h-panel">
+                <div class="card-body d-flex flex-column">
                     <div class="d-flex align-items-center gap-2 mb-3">
                         <i class="bi bi-wallet2"></i>
                         <span class="fw-semibold">Wallet Balance</span>
                     </div>
 
                     <div class="display-6 fw-semibold text-white mb-3">
-                        ฿ {{ currentUser?.user?.wallet_balance| number:'1.0-0' }} บาท
+                        ฿ {{ walletBalance | number:'1.0-0' }} บาท
                     </div>
 
                     <div class="d-flex flex-wrap gap-2 mb-3">
@@ -34,42 +36,66 @@
                         </button>
                     </div>
 
-                    <div class="row g-2">
-                        <div class="col">
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-text">฿</span>
-                                <!-- <input type="number" class="form-control" placeholder="Custom amount"
-                                    formControlName="customAmount" [formGroup]="form" min="1"> -->
+                    <form [formGroup]="form" class="mt-auto"> <!-- ดันฟอร์มลงล่างให้ดูโปร่ง -->
+                        <div class="row g-2">
+                            <div class="col">
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">฿</span>
+                                    <input type="number" class="form-control" placeholder="Custom amount"
+                                        formControlName="customAmount" min="1">
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-chip btn-lg" (click)="topup()">Top-up</button>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-chip btn-lg" (click)="topup(0)">Top-up</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
 
         <!-- Transaction History -->
         <div class="col-12 col-lg-6">
-            <div class="card glass rounded-4">
-                <div class="card-body">
+            <div class="card glass rounded-4 h-panel">
+                <div class="card-body d-flex flex-column">
                     <div class="fw-semibold mb-3">Transaction History</div>
 
-                    <div class="d-grid gap-3">
-                        <div class="tx-pill d-flex align-items-center justify-content-between" *ngFor="let t of txs">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="bi"
-                                    [ngClass]="t.type==='topup' ? 'bi-arrow-down-circle' : 'bi-bag-check'"></i>
-                                <span>{{ t.title }}</span>
-                            </div>
-                            <span class="date-tag">{{ t.date }}</span>
-                        </div>
-                    </div>
+                    <!-- สกรอลล์เฉพาะข้างใน -->
+                    <div class="tx-scroll">
 
+                        <!-- กรณีมีรายการ -->
+                        <ng-container *ngIf="data?.data?.length; else txEmpty">
+                            <div class="d-grid gap-3">
+                                <div class="tx-row d-flex align-items-center justify-content-between"
+                                    *ngFor="let t of data!.data">
+                                    <div class="d-flex align-items-center gap-2 min-w-0">
+                                        <i class="bi"
+                                            [ngClass]="t.note === 'topup' ? 'bi-arrow-down-circle' : 'bi-bag-check'"></i>
+                                        <span class="text-truncate">{{ t.note }}</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-3 flex-shrink-0">
+                                        <span class="amount-badge fw-semibold"
+                                            [class.text-success]="t.type === 'CREDIT'"
+                                            [class.text-danger]="t.type !== 'CREDIT'">
+                                            {{ (t.type === 'CREDIT' ? '+' : '-') + (t.amount) }}
+                                        </span>
+                                        <span class="date-tag">{{ t.created_at | date:'dd MMM yyyy, HH:mm' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <!-- ว่าง: ไม่มีประวัติ -->
+                        <ng-template #txEmpty>
+                            <div class="tx-empty">
+                                <i class="bi bi-receipt text-white-50 fs-1 mb-2"></i>
+                                <div class="text-secondary mb-1">ยังไม่มีประวัติการทำธุรกรรม</div>
+                            </div>
+                        </ng-template>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
