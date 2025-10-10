@@ -1,37 +1,68 @@
 <div class="text-light layout-root">
-
   <div class="container-xxl my-4 flex-grow-1">
 
     <!-- Hero -->
     <div class="card hero-card card-dark surface-gradient rounded-4 mb-4 border border-divider overflow-hidden">
-      <div class="row g-0 g-sm-3 align-items-stretch">
-        <div class="col-md-6">
-          <div class="hero-media">
-            <img alt="Hero" class="w-100 h-100 object-cover" *ngIf="topgame" [src]="getCardImage(topgame)" />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="hero-body p-3 p-sm-4 h-100 d-flex flex-column justify-content-center">
-            <h2 class="h4 fw-bold mb-2 text-white">{{topgame?.name}}</h2>
-            <p class="small mb-3 text-muted-70">
-              {{topgame?.description}}
-              developed by <a class="link-light text-decoration-none opacity-75" href="#">{{topgame?.developer}}</a>.
-            </p>
-            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-              <span *ngFor="let cat of topgame?.categories" class="badge rounded-pill px-3 py-2 chip border">
-                {{ cat.category_name }}
-              </span>
-            </div>
 
-            <div class="d-flex flex-wrap gap-2">
-              <a class="btn btn-soft rounded-3 border border-divider" href="#">View Details</a>
-              <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
-                <i class="bi bi-cart-plus me-2"></i>Add to Cart — ฿{{topgame?.price}}
-              </a>
+      <!-- Hero: กำลังโหลด -->
+      <ng-container *ngIf="isLoading; else heroReady">
+        <div class="row g-0 g-sm-3 align-items-stretch">
+          <div class="col-md-6">
+            <div class="hero-media">
+              <div class="skeleton w-100 h-100 rounded-0"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="hero-body p-3 p-sm-4 h-100 d-flex flex-column justify-content-center">
+              <div class="skeleton skeleton-text w-75 mb-2"></div>
+              <div class="skeleton skeleton-text w-100 mb-2"></div>
+              <div class="skeleton skeleton-text w-50 mb-3"></div>
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                <span class="skeleton skeleton-chip"></span>
+                <span class="skeleton skeleton-chip"></span>
+                <span class="skeleton skeleton-chip"></span>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="skeleton skeleton-btn"></span>
+                <span class="skeleton skeleton-btn"></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
+
+      <!-- Hero: มีข้อมูล -->
+      <ng-template #heroReady>
+        <div class="row g-0 g-sm-3 align-items-stretch">
+          <div class="col-md-6">
+            <div class="hero-media">
+              <img alt="Hero" class="w-100 h-100 object-cover" *ngIf="topgame" [src]="getCardImage(topgame)" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="hero-body p-3 p-sm-4 h-100 d-flex flex-column justify-content-center">
+              <h2 class="h4 fw-bold mb-2 text-white">{{topgame?.name}}</h2>
+              <p class="small mb-3 text-muted-70">
+                {{topgame?.description}}
+                developed by
+                <a class="link-light text-decoration-none opacity-75" href="#">{{topgame?.developer}}</a>.
+              </p>
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                <span *ngFor="let cat of topgame?.categories" class="badge rounded-pill px-3 py-2 chip border">
+                  {{ cat.category_name }}
+                </span>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-soft rounded-3 border border-divider" href="#">View Details</a>
+                <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
+                  <i class="bi bi-cart-plus me-2"></i>Add to Cart — ฿{{topgame?.price}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
     </div>
 
     <!-- Layout: ซ้ายเลื่อน / ขวา sticky -->
@@ -45,20 +76,46 @@
             <span class="input-group-text bg-transparent text-secondary border border-divider">
               <i class="bi bi-search"></i>
             </span>
-            <input type="search" class="form-control bg-glass border border-divider"
-              placeholder="Search games, genres, tags...">
+            <input type="search"
+       class="form-control bg-glass border border-divider"
+       placeholder="Search games, genres, tags..."
+       [formControl]="gameSearch">
           </div>
         </div>
 
         <!-- GameCard Grid (เลื่อนเฉพาะส่วนนี้) -->
-        <!-- GameCard Grid (เลื่อนเฉพาะส่วนนี้) -->
         <div class="game-grid-scroll mt-3">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
 
-            <ng-container *ngIf="gamesFilted?.length; else emptyGrid">
+            <!-- กำลังโหลด: โชว์ skeleton การ์ด 6 ใบ -->
+            <ng-container *ngIf="isLoading">
+              <div class="col" *ngFor="let s of [1,2,3,4,5,6]">
+                <div class="card card-game h-100 rounded-4 card-dark overflow-hidden">
+                  <div class="ratio ratio-16x9">
+                    <div class="skeleton w-100 h-100"></div>
+                  </div>
+                  <div class="card-body">
+                    <div class="skeleton skeleton-text w-75 mb-2"></div>
+                    <div class="d-flex gap-2 mb-2">
+                      <span class="skeleton skeleton-chip"></span>
+                      <span class="skeleton skeleton-chip"></span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <span class="skeleton skeleton-text w-25"></span>
+                      <div class="d-flex gap-2">
+                        <span class="skeleton skeleton-btn-sm"></span>
+                        <span class="skeleton skeleton-btn-sm"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- มีข้อมูล -->
+            <ng-container *ngIf="!isLoading && gamesFilted?.length; else emptyGrid">
               <div class="col" *ngFor="let g of gamesFilted; trackBy: trackByGid">
                 <div class="card card-game h-100 rounded-4 card-dark hover-outline overflow-hidden">
-
                   <div class="ratio ratio-16x9 bg-black bg-opacity-50">
                     <img class="w-100 h-100 object-fit-cover" [src]="getCardImage(g)" [alt]="g.name" />
                   </div>
@@ -72,9 +129,7 @@
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
-                      <span class="text-white-80 fw-semibold">
-                        ฿{{ toPrice(g) }}
-                      </span>
+                      <span class="text-white-80 fw-semibold">฿{{ toPrice(g) }}</span>
 
                       <div class="d-flex gap-2">
                         <a class="btn btn-soft rounded-3 border border-divider">Details</a>
@@ -91,12 +146,13 @@
               </div>
             </ng-container>
 
-            <!-- ว่าง/กำลังโหลด -->
+            <!-- ว่าง/ไม่มีเกม -->
             <ng-template #emptyGrid>
               <div class="col-12 col-md-8 col-lg-6 mx-auto">
                 <div class="card card-dark rounded-4 border border-divider">
                   <div class="card-body text-secondary empty-center text-center">
-                    No games to display.
+                    <div class="mb-2">No games to display.</div>
+                    <div class="small text-muted-2">ลองเปลี่ยนตัวกรองด้านขวา หรือเคลียร์การค้นหา</div>
                   </div>
                 </div>
               </div>
