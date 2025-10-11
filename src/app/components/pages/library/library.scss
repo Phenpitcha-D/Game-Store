@@ -1,0 +1,52 @@
+/* glass ตามโทนเดิม */
+.glass{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  color:#fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* input */
+.input-group .input-group-text,
+.input-group .form-control{
+  background: rgba(255,255,255,.05);
+  color:#e8e8e8;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.input-group .form-control::placeholder{ color:#9aa3b2; }
+
+/* การ์ดเกม */
+.card-game{ transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease; }
+.hover-outline:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.2);
+  box-shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+
+/* ป้าย tag */
+.badge.chip{
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  color:#fff;
+  border-radius: 1rem;
+  padding: .35rem .6rem;
+  font-weight: 500;
+}
+
+/* ปุ่ม */
+.btn-soft{
+  background: rgba(255,255,255,.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+}
+.btn-soft:hover{ background: rgba(255,255,255,.12); color:#fff; }
+
+.btn-soft-strong{
+  background: rgba(46, 160, 67, .9);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+}
+.btn-soft-strong:hover{ background: rgba(46,160,67,1); color:#fff; }
+
+/* empty state */
+.empty-card{ min-height: 280px; display: grid; place-items: center; }

@@ -1,0 +1,168 @@
+<div class="container py-4 py-lg-5">
+    <div class="row g-4">
+
+        <!-- LEFT: Form -->
+        <div class="col-12 col-lg-6 col-xl-7">
+            <div class="card glass rounded-4 h-panel">
+                <div class="card-body d-flex flex-column">
+                    <div class="panel-head d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="h6 text-white fw-semibold mb-1">Create / Edit Promotion</div>
+                            <div class="text-secondary small">ตั้งค่าโค้ดส่วนลดและเงื่อนไขการใช้งาน</div>
+                        </div>
+                    </div>
+
+                    <form *ngIf="form" [formGroup]="form" (ngSubmit)="save()" class="d-grid gap-3" novalidate>
+                        <!-- Section: Basic -->
+                        <div class="section">
+                            <div class="section-title">Basic</div>
+                            <div class="row g-3">
+                                <div class="col-12 col-md-5">
+                                    <label class="form-label text-secondary small">Code</label>
+                                    <input class="form-control form-control-lg" formControlName="code"
+                                        (blur)="normalizeCode()" placeholder="e.g. SUMMER24" [disabled]="isSubmitting">
+                                    <div class="text-danger small mt-1"
+                                        *ngIf="form.get('code')?.invalid && form.get('code')?.touched">
+                                        ตัวอักษร A–Z, 0–9, _ หรือ – ความยาว 3–20
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label text-secondary small">Type</label>
+                                    <select class="form-select form-select-lg" formControlName="type"
+                                        [disabled]="isSubmitting">
+                                        <option value="percent">Percent (%)</option>
+                                        <option value="amount">Amount (฿)</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-6 col-md-4">
+                                    <label class="form-label text-secondary small">Value</label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text">
+                                            {{ form.value.type === 'percent' ? '%' : '฿' }}
+                                        </span>
+                                        <input type="number" class="form-control" formControlName="value" min="1"
+                                            [disabled]="isSubmitting">
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label text-secondary small">Notes</label>
+                                    <input class="form-control form-control-lg" formControlName="notes"
+                                        placeholder="หมายเหตุสำหรับทีม/ลูกค้า (ถ้ามี)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Usage & Schedule -->
+                        <div class="section">
+                            <div class="section-title">Usage & Schedule</div>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label text-secondary small">Usage limit</label>
+                                    <div class="d-flex gap-3 flex-wrap align-items-center">
+                                        <div class="form-check d-flex align-items-center gap-2">
+                                            <input class="form-check-input border-secondary" type="checkbox"
+                                                formControlName="noLimit" id="noLimit">
+                                            <label for="noLimit" class="form-check-label small">No limit</label>
+                                        </div>
+                                        <div class="input-group input-group-lg limit-box">
+                                            <span class="input-group-text"><i class="bi bi-people"></i></span>
+                                            <input type="number" class="form-control" formControlName="maxUses" min="1"
+                                                placeholder="เช่น 100" [disabled]="isSubmitting">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label text-secondary small">Start</label>
+                                    <input type="date" class="form-control form-control-lg" formControlName="startAt">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label text-secondary small">End</label>
+                                    <input type="date" class="form-control form-control-lg" formControlName="endAt">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="form-actions d-flex flex-wrap gap-2 justify-content-between">
+                            <button type="button" class="btn btn-chip" (click)="startAdd()">Clear</button>
+                            <button type="submit" class="btn btn-chip" [disabled]="isSubmitting || form.invalid">
+                                {{ editingId ? 'Save' : 'Add' }}
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-12 col-lg-6 col-xl-5">
+            <div class="card glass rounded-4 h-panel">
+                <div class="card-body d-flex flex-column">
+
+                    <div class="list-toolbar">
+                        <div class="h6 text-white fw-semibold mb-2">Promo Codes</div>
+                        <div class="input-group input-group-lg mb-2">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input class="form-control" placeholder="Search code...">
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-chip" [class.active-chip]="statusFilter()==='all'"
+                                (click)="statusFilter.set('all')">All</button>
+                            <button type="button" class="btn btn-chip" [class.active-chip]="statusFilter()==='active'"
+                                (click)="statusFilter.set('active')">Active</button>
+                            <button type="button" class="btn btn-chip" [class.active-chip]="statusFilter()==='expired'"
+                                (click)="statusFilter.set('expired')">Expired</button>
+                            <button type="button" class="btn btn-chip" [class.active-chip]="statusFilter()==='depleted'"
+                                (click)="statusFilter.set('depleted')">Depleted</button>
+                        </div>
+                    </div>
+
+                    <!-- Scroll area -->
+                    <div class="promos-scroll mt-3">
+                        <div class="d-grid gap-3">
+                            <div class="promo-row" *ngFor="let p of filteredPromos(); trackBy: trackById">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="code-pill text-white fw-semibold">{{ p.code }}</div>
+
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <span class="badge chip">
+                                                {{ p.type === 'percent' ? (p.value + '%') : ('฿' + p.value) }}
+                                            </span>
+                                            <span class="usage small text-secondary">
+                                                Used {{ p.used }}{{ p.maxUses !== null ? (' / ' + p.maxUses) : '' }}
+                                            </span>
+                                            <span class="badge status" [ngClass]="badgeClass(promoStatus(p))">
+                                                {{ promoStatus(p) }}
+                                            </span>
+                                        </div>
+                                        <div class="sub text-secondary small text-truncate">
+                                            {{ p.startAt ? ('From ' + p.startAt) : 'No start' }} •
+                                            {{ p.endAt ? ('To ' + p.endAt) : 'No end' }} •
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                        <button class="btn btn-chip" (click)="edit(p)"><i
+                                                class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-chip" (click)="remove(p)"><i
+                                                class="bi bi-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="filteredPromos().length===0" class="text-secondary text-center py-4">
+                                No promo found.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

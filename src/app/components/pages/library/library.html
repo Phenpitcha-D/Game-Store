@@ -1,0 +1,49 @@
+<div class="container py-4 py-lg-5">
+
+    <!-- มีเกมในไลบรารี -->
+    <ng-container *ngIf="myGames?.length; else emptyLib">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+            <div class="col" *ngFor="let g of myGames">
+                <div class="card card-game glass rounded-4 h-100 hover-outline overflow-hidden">
+
+                    <div class="ratio ratio-16x9 bg-black bg-opacity-50">
+                        <img class="w-100 h-100 object-fit-cover" [src]="g.images[0]?.url" [alt]="g.name">
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                            <h6 class="mb-0 text-white text-truncate">{{ g.name }}</h6>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-2">
+                            <span class="text-white-50 small text-truncate">
+                                Never played
+                            </span>
+                            <button type="button" class="btn btn-soft rounded-pill px-3">
+                                Play
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- ว่าง: ยังไม่มีเกมที่ซื้อ -->
+    <ng-template #emptyLib>
+        <div class="card glass rounded-4 empty-card">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-collection text-white-50 fs-1 d-block mb-2"></i>
+                <div class="h5 text-white fw-semibold mb-1">No games in your library</div>
+                <p class="text-secondary mb-3">
+                    Browse the store and add some games to your collection.
+                </p>
+                <a routerLink="/store" class="btn btn-soft-strong rounded-pill px-4">
+                    Go to Store
+                </a>
+            </div>
+        </div>
+    </ng-template>
+
+</div>
