@@ -10,6 +10,8 @@ import { Admin } from './components/pages/admin/admin';
 import { UserTransactions } from './components/pages/user-transactions/user-transactions';
 import { Cart } from './components/pages/cart/cart';
 import { GameDetail } from './components/pages/game-detail/game-detail';
+import { ManagePromotions } from './components/pages/manage-promotions/manage-promotions';
+import { Library } from './components/pages/library/library';
 
 export const routes: Routes = [
     { path : '', component: Home},
@@ -21,10 +23,13 @@ export const routes: Routes = [
         children: [
             { path: '', component: AdminManager },
             { path: 'manage-games', component: ManageGame },
-            { path: 'view-transactions', component: UserTransactions}, 
+            { path: 'view-transactions', component: UserTransactions},
+            { path : 'promotions', component: ManagePromotions }, 
         ],
     },
     { path : 'cart', component: Cart },
     { path : 'game-detail', component: GameDetail },
+    { path : 'game-detail/:gid', component: GameDetail },
+    { path: 'library', component: Library }
     { path : 'game-detail/:gid', component: GameDetail },
 ];
