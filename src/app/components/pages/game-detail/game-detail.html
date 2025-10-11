@@ -1,90 +1,141 @@
 <div class="container py-4 py-lg-5 details-page">
-    <div class="row g-4">
-        <!-- LEFT: Main card -->
-        <div class="col-12 col-lg-8">
-            <div class="card glass rounded-4 overflow-hidden">
-                <!-- Hero -->
-                <div class="hero ratio ratio-21x9">
-                    <img [src]="game?.hero || fallbackHero" alt="hero">
-                </div>
-
-                <div class="card-body">
-                    <!-- Title + rating -->
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <h2 class="h4 fw-bold text-white mb-0">
-                            {{ game?.name || 'Death Stranding : Director’s cut' }}
-                        </h2>
-                        <div class="d-flex align-items-center gap-2 text-white">
-                            <i class="bi bi-star-fill"></i>
-                            <span>{{ game?.rating || 4.0 }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Tags -->
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge chip">Single-player</span>
-                        <span class="badge chip">Controller</span>
-                        <span class="badge chip">Cloud Save</span>
-                        <!-- หรือ *ngFor="let t of game?.tags" -->
-                    </div>
-
-                    <!-- Description -->
-                    <p class="text-white-75 mb-3">
-                        {{ game?.description || 'Death Stranding is an action-adventure game developed by Kojima
-                        Productions...' }}
-                    </p>
-
-                    <!-- Gallery -->
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6" *ngFor="let img of (game?.gallery || gallery)">
-                            <div class="thumb ratio ratio-16x9">
-                                <img [src]="img" alt="screenshot">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="row g-4">
+    <!-- LEFT: Main card -->
+    <div class="col-12 col-lg-8">
+      <div class="card glass rounded-4 overflow-hidden">
+        <!-- Hero -->
+        <div class="hero ratio ratio-21x9">
+          <img [src]="heroSrc" alt="hero" />
         </div>
 
-        <!-- RIGHT: Purchase + Details -->
-        <div class="col-12 col-lg-4">
-            <!-- Purchase -->
-            <div class="card glass rounded-4 mb-3">
-                <div class="card-body">
-                    <div class="h6 fw-semibold text-white mb-3">Purchase</div>
+        <div class="card-body">
+          <!-- Title -->
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h2 class="h4 fw-bold text-white mb-0">
+              {{ game?.name || 'Death Stranding : Director’s cut' }}
+            </h2>
+          </div>
 
-                    <div class="display-6 fw-semibold text-white mb-3">
-                        ฿{{ game?.price || 599 }}
-                    </div>
+          <!-- Tags -->
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span *ngFor="let cat of game?.categories" class="badge chip">
+              {{ cat.category_name }}
+            </span>
+          </div>
 
-                    <button type="button" class="btn btn-soft w-100 rounded-3 mb-2" (click)="addToCart(game)">
-                        Add to Cart
-                    </button>
-                    <button type="button" class="btn btn-soft-strong w-100 rounded-3" (click)="buyNow(game)">
-                        Buy
-                    </button>
-                </div>
+          <!-- Description -->
+          <p class="text-white-75 mb-3">
+            {{ game?.description || 'Death Stranding is an action-adventure game developed by Kojima Productions...' }}
+          </p>
+
+          <!-- Gallery -->
+          <div class="row g-3">
+            <div class="col-12 col-md-6" *ngFor="let src of gallerySrcs">
+              <div class="thumb ratio ratio-16x9">
+                <img [src]="src" alt="screenshot" />
+              </div>
             </div>
-
-            <!-- Details -->
-            <div class="card glass rounded-4">
-                <div class="card-body">
-                    <div class="h6 fw-semibold text-white mb-3">Details</div>
-                    <dl class="row g-2 small mb-0">
-                        <dt class="col-5 text-secondary">RELEASE DATE:</dt>
-                        <dd class="col-7 text-white">
-                            {{ game?.release || ('30 Mar, 2022') }}
-                        </dd>
-
-                        <dt class="col-5 text-secondary">DEVELOPER:</dt>
-                        <dd class="col-7">
-                            <a class="link-light text-decoration-none opacity-75" href="#">
-                                {{ game?.developer || 'KOJIMA PRODUCTIONS' }}
-                            </a>
-                        </dd>
-                    </dl>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
+
+    <!-- RIGHT: Purchase + Details -->
+    <div class="col-12 col-lg-4">
+      <!-- Purchase -->
+      <div class="card glass rounded-4 mb-3">
+        <div class="card-body">
+          <div class="h6 fw-semibold text-white mb-3">Purchase</div>
+
+          <div class="display-6 fw-semibold text-white mb-3">
+            ฿{{ priceNumber | number: '1.0-0' }}
+          </div>
+
+          <button type="button" class="btn btn-soft w-100 rounded-3 mb-2" (click)="addToCart(game)">
+            Add to Cart
+          </button>
+
+          <!-- ปุ่ม Buy: toggle แผงด้านล่าง -->
+          <button type="button" class="btn btn-soft-strong w-100 rounded-3" (click)="toggleBuy()">
+            Buy
+          </button>
+
+          <!-- แผง Buy แสดง "ใต้ปุ่ม" นี้ -->
+          <div class="buy-inline card rounded-4 mt-3" *ngIf="isBuyOpen">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="h5 text-white mb-0">Buy</div>
+                <button type="button" class="btn btn-sm btn-outline-light" (click)="toggleBuy()">✕</button>
+              </div>
+
+              <div class="d-flex justify-content-between text-secondary mb-2">
+                <span>Subtotal</span>
+                <span>฿{{ priceNumber | number: '1.0-0' }}</span>
+              </div>
+
+              <div class="d-flex justify-content-between text-secondary mb-2" *ngIf="discount > 0">
+                <span>Promo code</span>
+                <span>-฿{{ discount | number: '1.0-0' }}</span>
+              </div>
+
+              <hr class="my-3" />
+
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="h4 text-white mb-0">Total</div>
+                <div class="h4 text-white mb-0">฿{{ total | number: '1.0-0' }}</div>
+              </div>
+
+              <!-- Promo input -->
+              <div class="mb-3">
+                <input
+                  type="text"
+                  class="form-control rounded-3 text-secondary border-0"
+                  placeholder="Enter promo (e.g., GAME50)"
+                  [(ngModel)]="promoCode"
+                  (keyup.enter)="applyPromo()"
+                />
+                <div class="d-flex gap-2 mt-2">
+                  <button class="btn btn-sm btn-outline-light rounded-3" (click)="applyPromo()" [disabled]="applying">
+                    Apply
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary rounded-3"
+                          (click)="clearPromo()"
+                          [disabled]="!promoCode && discount === 0">
+                    Clear
+                  </button>
+                </div>
+                <small class="text-danger" *ngIf="promoError">{{ promoError }}</small>
+                <small class="text-success" *ngIf="discount > 0 && !promoError">Code applied</small>
+              </div>
+
+              <button class="btn btn-success w-100 rounded-3" (click)="buyConfirm()" [disabled]="buying">
+                {{ buying ? 'Processing...' : 'Buy' }}
+              </button>
+
+              <div class="text-danger small mt-2" *ngIf="buyError">{{ buyError }}</div>
+            </div>
+          </div>
+          <!-- /buy-inline -->
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="card glass rounded-4">
+        <div class="card-body">
+          <div class="h6 fw-semibold text-white mb-3">Details</div>
+          <dl class="row g-2 small mb-0">
+            <dt class="col-5 text-secondary">RELEASE DATE:</dt>
+            <dd class="col-7 text-white">{{ game?.released_at | date: 'dd MMM, yyyy' }}</dd>
+
+            <dt class="col-5 text-secondary">DEVELOPER:</dt>
+            <dd class="col-7">
+              <a class="link-light text-decoration-none opacity-75" href="#">
+                {{ game?.developer || 'KOJIMA PRODUCTIONS' }}
+              </a>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

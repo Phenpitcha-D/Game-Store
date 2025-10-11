@@ -11,7 +11,8 @@
 .thumb img{
   width:100%; height:100%; object-fit:cover;
 }
-.thumb{ border-radius:.8rem; overflow:hidden;
+.thumb{
+  border-radius:.8rem; overflow:hidden;
   border:1px solid rgba(255,255,255,.12);
   box-shadow:0 2px 8px rgba(0,0,0,.35);
 }
@@ -35,11 +36,26 @@
 .btn-soft:hover{ background: rgba(255,255,255,.12); color:#fff; }
 
 .btn-soft-strong{
-  background: rgba(46, 160, 67, .85); /* เขียวโทนเดียวกับภาพ */
+  background: rgba(46, 160, 67, .85);
   color:#fff;
   border:1px solid rgba(255,255,255,.18);
 }
 .btn-soft-strong:hover{ background: rgba(46,160,67,1); color:#fff; }
 
-/* เล็กน้อยให้สัดส่วนอ่านง่าย */
+/* สัดส่วนอ่านง่าย */
 .details-page .card-body{ padding:1.1rem 1.2rem; }
+
+/* แผง Buy ที่อยู่ “ภในการ์ด” */
+.buy-inline{
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.buy-inline{
+  color: #fff;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+/* ล้างของเก่าที่เคย fixed/backdrop (กันเผลอใช้งาน) */
+.buy-backdrop, .buy-panel{ display:none !important; }

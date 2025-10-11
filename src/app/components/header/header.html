@@ -56,10 +56,10 @@
         <!-- Chip: avatar + name + caret -->
         <button type="button" class="btn btn-profile d-flex align-items-center gap-2" (click)="toggleProfileMenu()"
           [attr.aria-expanded]="isProfileOpen">
-          <img [src]="currentUser?.user?.img || defaultAvatar" (error)="onImgError($event)" alt="avatar"
+          <img [src]="currentUser.user.img || defaultAvatar" (error)="onImgError($event)" alt="avatar"
             class="avatar-32" />
           <span class="d-none d-lg-inline text-truncate" style="max-width:160px">
-            {{ currentUser?.user?.username }}
+            {{ currentUser.user.username }}
           </span>
           <i class="bi" [ngClass]="isProfileOpen ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
         </button>
@@ -67,20 +67,20 @@
         <!-- Popover card -->
         <div *ngIf="isProfileOpen" class="popover-card">
           <div class="d-flex align-items-center gap-3 mb-3">
-            <img [src]="currentUser?.user?.img || defaultAvatar" (error)="onImgError($event)" alt="avatar"
+            <img [src]="currentUser.user.img || defaultAvatar" (error)="onImgError($event)" alt="avatar"
               class="avatar-40" />
             <div class="min-w-0">
               <div class="fw-semibold text-white text-truncate">
-                {{ currentUser?.user?.username || 'User' }}
+                {{ currentUser.user.username || 'User' }}
               </div>
               <div class="text-secondary small text-truncate">
-                {{ currentUser?.user?.email }}
+                {{ currentUser.user.email }}
               </div>
             </div>
           </div>
 
           <div class="label tiny">Wallet</div>
-          <div class="wallet mb-3">฿ {{ currentUser?.user?.wallet_balance | number:'1.0-0' }}</div>
+          <div class="wallet mb-3">฿ {{ currentUser.user.wallet_balance | number:'1.0-0' }}</div>
 
           <div class="d-grid gap-2">
             <a class="btn btn-item" routerLink="/profile-wallet" (click)="closeProfileMenu()">ดูโปรไฟล์</a>

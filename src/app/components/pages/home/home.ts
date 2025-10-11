@@ -10,10 +10,11 @@ import { GetGameImageResponse } from '../../models/res/get_gameImg_res';
 import { GameCategoryRes } from '../../models/res/get_game_category_res';
 import { GetGameTypeRes } from '../../models/res/getGameType_res';
 import { GameTypeRes } from '../../models/res/gameType_res';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

@@ -14,7 +14,7 @@ export class Header {
   /** จำนวนสินค้าในตะกร้า (โชว์บน badge) */
   @Input() cartCount = 2;
 
-  currentUser: UserLoginRespon | undefined;
+  currentUser?: UserLoginRespon;
 
   /** ใช้รูป fallback เมื่อ user.img ว่าง/null/โหลดไม่ได้ */
   defaultAvatar =
