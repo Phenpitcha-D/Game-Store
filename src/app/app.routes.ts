@@ -26,5 +26,5 @@ export const routes: Routes = [
     },
     { path : 'cart', component: Cart },
     { path : 'game-detail', component: GameDetail },
-    // { path : 'game-details/:id', component: GameDetail },
+    { path : 'game-detail/:gid', component: GameDetail },
 ];
