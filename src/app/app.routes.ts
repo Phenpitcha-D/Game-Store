@@ -29,10 +29,7 @@ export const routes: Routes = [
     },
     { path : 'cart', component: Cart },
     { path : 'game-detail', component: GameDetail },
-<<<<<<< HEAD
-    { path : 'game-details/:gid', component: GameDetail },   
-    { path: 'library', component: Library }
-=======
     { path : 'game-detail/:gid', component: GameDetail },
->>>>>>> 698202b7ba80b1a8460ba548b7f263f1f8d6c5b7
+    { path: 'library', component: Library }
+    { path : 'game-detail/:gid', component: GameDetail },
 ];
