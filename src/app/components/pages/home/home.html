@@ -55,7 +55,7 @@
 
               <div class="d-flex flex-wrap gap-2">
                 <a class="btn btn-soft rounded-3 border border-divider" [routerLink]="['/game-detail', topgame?.gid]">View Details</a>
-                <a class="btn btn-soft-strong rounded-3 border border-divider" href="#">
+                <a class="btn btn-soft-strong rounded-3 border border-divider" (click)="addToCart(topgame!)">
                   <i class="bi bi-cart-plus me-2"></i>Add to Cart — ฿{{topgame?.price}}
                 </a>
               </div>

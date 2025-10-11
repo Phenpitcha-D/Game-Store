@@ -2,46 +2,71 @@ import { ChangeDetectorRef, Component, HostListener, Input } from '@angular/core
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Convert, UserLoginRespon } from '../models/res/user_login_res';
+
+
+export interface CartItemrResponse {
+  success: boolean;
+  data: Datum[];
+}
+
+export interface Datum {
+  oid: number;
+  status: string;
+  total_before: string;
+  total_after: string;
+  created_at: string;
+  paid_at: null;
+  pid: null;
+  items_count: number;
+}
+
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, HttpClientModule],
   templateUrl: './header.html',
-  styleUrl: './header.scss', // คงรูปแบบเดิมของโปรเจกต์คุณ
+  styleUrl: './header.scss',
 })
 export class Header {
-  /** จำนวนสินค้าในตะกร้า (โชว์บน badge) */
-  @Input() cartCount = 2;
-
+  @Input() cartCount = 0;
   currentUser?: UserLoginRespon;
-
-  /** ใช้รูป fallback เมื่อ user.img ว่าง/null/โหลดไม่ได้ */
   defaultAvatar =
     'https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg';
-
-  /** เปิด/ปิดป๊อปโอเวอร์โปรไฟล์ */
   isProfileOpen = false;
 
-  private onAuthChanged = () => {
-    this.loadUser();
-    this.cdr.markForCheck();
-  };
+  private base = 'https://game-store-backend-vs08.onrender.com';
 
-  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loadUser();
-    // ฟังเหตุการณ์เปลี่ยนสถานะล็อกอินจากทุกที่/หลายแท็บ
+    this.loadCart();
+
     window.addEventListener('auth-changed', this.onAuthChanged);
     window.addEventListener('storage', this.onAuthChanged);
+    window.addEventListener('cart-changed', this.onCartChanged); // ✅ ฟัง event ตะกร้า
   }
 
   ngOnDestroy(): void {
     window.removeEventListener('auth-changed', this.onAuthChanged);
     window.removeEventListener('storage', this.onAuthChanged);
+    window.removeEventListener('cart-changed', this.onCartChanged);
   }
 
+  /** เมื่อ user เปลี่ยน */
+  private onAuthChanged = () => {
+    this.loadUser();
+    this.cdr.markForCheck();
+  };
+
+  /** เมื่อ cart มีการเปลี่ยน */
+  private onCartChanged = () => {
+    this.loadCart();
+  };
+
+  /** โหลดข้อมูล user จาก localStorage */
   private loadUser() {
     this.currentUser = undefined;
     const raw = localStorage.getItem('user');
@@ -49,49 +74,47 @@ export class Header {
     try {
       this.currentUser = Convert.toUserLoginRespon(raw);
     } catch {
-      // ถ้า schema ไม่ตรงก็ไม่ตั้งค่าเพื่อกันพัง
       this.currentUser = undefined;
     }
   }
 
-  /** ใช้กับปุ่ม cart หรือเมนูที่อยากสั่งนำทางด้วยโค้ด */
-  goTo(path: string): void {
-    this.router.navigate([path]);
+  /** โหลดจำนวนสินค้าในตะกร้า */
+  private loadCart() {
+    const token = localStorage.getItem('token') ?? '';
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+
+    this.http.get<CartItemrResponse>(
+      `${this.base}/api/order?status=DRAFT`,
+      { headers }
+    ).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.cartCount = res.data[0].items_count;
+          this.cdr.markForCheck();
+        }
+      },
+      error: (err) => console.error('⚠️ loadCart failed:', err)
+    });
   }
 
-  signIn(): void {
-    this.router.navigate(['/login']);
-  }
+  // --------------- UI functions ----------------
 
+  goTo(path: string): void { this.router.navigate([path]); }
+  signIn(): void { this.router.navigate(['/login']); }
   signOut(): void {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');       // ถ้าใช้ชื่ออื่นเช่น auth_token ใส่ด้วย
+    localStorage.removeItem('auth_token');
+
+    this.cartCount = 0;                     // ✅ รีเซ็ตเลขทันที
     window.dispatchEvent(new CustomEvent('auth-changed'));
+    window.dispatchEvent(new CustomEvent('cart-changed')); // อัปเดตแท็บปัจจุบัน
     this.closeProfileMenu();
     this.router.navigate(['/login']);
   }
-
-  /** Avatar error → ใช้ fallback */
-  onImgError(ev: Event) {
-    (ev.target as HTMLImageElement).src = this.defaultAvatar;
-  }
-
-  /** Toggle/close เมนูโปรไฟล์ */
-  toggleProfileMenu() {
-    this.isProfileOpen = !this.isProfileOpen;
-  }
-  closeProfileMenu() {
-    this.isProfileOpen = false;
-  }
-
-  /** ปิดเมื่อคลิกนอก */
-  @HostListener('document:click')
-  onDocClick() {
-    this.isProfileOpen = false;
-  }
-
-  /** ปิดเมื่อกด ESC */
-  @HostListener('document:keydown.escape')
-  onEsc() {
-    this.isProfileOpen = false;
-  }
+  onImgError(ev: Event) { (ev.target as HTMLImageElement).src = this.defaultAvatar; }
+  toggleProfileMenu() { this.isProfileOpen = !this.isProfileOpen; }
+  closeProfileMenu() { this.isProfileOpen = false; }
+  @HostListener('document:click') onDocClick() { this.isProfileOpen = false; }
+  @HostListener('document:keydown.escape') onEsc() { this.isProfileOpen = false; }
 }

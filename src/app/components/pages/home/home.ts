@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { catchError, forkJoin, map, of, switchMap, tap, finalize, debounceTime, distinctUntilChanged, startWith, Subscription } from 'rxjs';
@@ -11,6 +11,26 @@ import { GameCategoryRes } from '../../models/res/get_game_category_res';
 import { GetGameTypeRes } from '../../models/res/getGameType_res';
 import { GameTypeRes } from '../../models/res/gameType_res';
 import { RouterLink } from '@angular/router';
+
+export interface GetOrderResponse {
+    success: boolean;
+    message: string;
+    order:   Order;
+    items:   any[];
+}
+
+export interface Order {
+    oid:          number;
+    uid:          number;
+    pid:          null;
+    status:       string;
+    total_before: string;
+    total_after:  string;
+    created_at:   string;
+    paid_at:      null;
+}
+
+
 
 @Component({
   selector: 'app-home',
@@ -132,8 +152,25 @@ export class Home implements OnInit, OnDestroy {
   }
 
   addToCart(g: GameResponse) {
-    // TODO: เชื่อมต่อ cart service/endpoint
-    console.log('Add to cart:', g.gid, g.name);
+    const token = localStorage.getItem('token') ?? '';
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+
+    const url =  `${this.base}/api/order`
+    var oid = 0;
+     this.http.post<GetOrderResponse>(url, null,{ headers }).pipe(
+      map(res => res.order.oid),
+
+      switchMap(oid =>
+      this.http.post(`${this.base}/api/order/${oid}/items`, { gid: g.gid}, { headers })
+    ),
+     ).subscribe({
+    next: () => {
+      // ✅ สำเร็จแล้วค่อยประกาศ “ตะกร้าเปลี่ยน”
+      window.dispatchEvent(new CustomEvent('cart-changed'));           // แท็บปัจจุบัน
+      localStorage.setItem('cart-updated', Date.now().toString());     // ทุกแท็บผ่าน storage event
+    },
+    error: (err) => console.error('addToCart error:', err),
+  });
   }
 
   getCardImage(g: GameResponse): string {
