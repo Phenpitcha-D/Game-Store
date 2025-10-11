@@ -64,6 +64,7 @@ export class Header {
     window.addEventListener('storage', this.onAuthChanged);
     window.addEventListener('cart-changed', this.onCartChanged); // ✅ ฟัง event ตะกร้า
     window.addEventListener('wallet-changed', this.onWalletChanged);
+    window.addEventListener('order-paid', ()=>{this.cartCount = 0;});
   }
 
   ngOnDestroy(): void {
@@ -71,20 +72,25 @@ export class Header {
     window.removeEventListener('storage', this.onAuthChanged);
     window.removeEventListener('cart-changed', this.onCartChanged);
     window.removeEventListener('wallet-changed', this.onWalletChanged);
+    window.removeEventListener('order-paid', ()=>{this.cartCount = 0;});
   }
 
   /** เมื่อ user เปลี่ยน */
   private onAuthChanged = () => {
     this.loadUser();
+    this.loadCart();
     this.cdr.markForCheck();
   };
 
   /** เมื่อ cart มีการเปลี่ยน */
   private onCartChanged = () => {
     this.loadCart();
+    this.cdr.markForCheck();
   };
   private onWalletChanged = () => {
     this.loadUser();
+    this.loadCart();
+    this.cdr.markForCheck();
   };
 
   /** โหลดข้อมูล user จาก localStorage */
