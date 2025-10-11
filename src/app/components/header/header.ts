@@ -5,6 +5,22 @@ import { RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Convert, UserLoginRespon } from '../models/res/user_login_res';
 
+export interface User {
+  success: boolean;
+  user: UserClass;
+}
+
+export interface UserClass {
+  uid: number;
+  username: string;
+  email: string;
+  img: string;
+  role: string;
+  wallet_balance: string;
+  created_at: string;
+}
+
+
 
 export interface CartItemrResponse {
   success: boolean;
@@ -47,12 +63,14 @@ export class Header {
     window.addEventListener('auth-changed', this.onAuthChanged);
     window.addEventListener('storage', this.onAuthChanged);
     window.addEventListener('cart-changed', this.onCartChanged); // ✅ ฟัง event ตะกร้า
+    window.addEventListener('wallet-changed', this.onWalletChanged);
   }
 
   ngOnDestroy(): void {
     window.removeEventListener('auth-changed', this.onAuthChanged);
     window.removeEventListener('storage', this.onAuthChanged);
     window.removeEventListener('cart-changed', this.onCartChanged);
+    window.removeEventListener('wallet-changed', this.onWalletChanged);
   }
 
   /** เมื่อ user เปลี่ยน */
@@ -65,11 +83,20 @@ export class Header {
   private onCartChanged = () => {
     this.loadCart();
   };
+  private onWalletChanged = () => {
+    this.loadUser();
+  };
 
   /** โหลดข้อมูล user จาก localStorage */
   private loadUser() {
     this.currentUser = undefined;
     const raw = localStorage.getItem('user');
+    const token = localStorage.getItem('token') ?? '';
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+    this.http.get<User>(`${this.base}/api/profile/me`, { headers }).subscribe(res => {
+      this.currentUser!.user.wallet_balance = parseFloat(res.user.wallet_balance);
+    });
+
     if (!raw) return;
     try {
       this.currentUser = Convert.toUserLoginRespon(raw);
@@ -96,6 +123,7 @@ export class Header {
       error: (err) => console.error('⚠️ loadCart failed:', err)
     });
   }
+
 
   // --------------- UI functions ----------------
 

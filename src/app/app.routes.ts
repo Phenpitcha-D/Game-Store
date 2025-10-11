@@ -31,5 +31,4 @@ export const routes: Routes = [
     { path : 'game-detail', component: GameDetail },
     { path : 'game-detail/:gid', component: GameDetail },
     { path: 'library', component: Library }
-    { path : 'game-detail/:gid', component: GameDetail },
 ];

@@ -6,10 +6,11 @@ import { GetUserLIB } from '../../models/res/get_UserLib_res';
 import { Constants } from '../../../config/constants';
 import { CommonModule } from '@angular/common';
 import { UserLoginRespon } from '../../models/res/user_login_res';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-library',
-  imports: [HttpClientModule, CommonModule],
+  imports: [HttpClientModule, CommonModule, RouterLink],
   templateUrl: './library.html',
   styleUrl: './library.scss'
 })

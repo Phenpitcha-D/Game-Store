@@ -4,14 +4,14 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Convert, UserLoginRespon } from '../../models/res/user_login_res';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Constants } from '../../../config/constants';
 import { WalletTransactions } from '../../models/res/getWalletTrans';
 
 export interface GetBalanceRes {
-    success: boolean;
-    uid:     number;
-    balance: number;
+  success: boolean;
+  uid: number;
+  balance: number;
 }
 
 @Component({
@@ -22,7 +22,7 @@ export interface GetBalanceRes {
 })
 export class ProfileWallet implements OnInit {
   defaultAvatar = 'https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg';
-  
+
   form!: FormGroup;
   quick = [100, 200, 500];
   walletBalance: number = 0;
@@ -35,7 +35,7 @@ export class ProfileWallet implements OnInit {
     this.cdr.markForCheck();
   };
 
-  constructor(private router: Router, private cdr: ChangeDetectorRef, private fb: FormBuilder, private http: HttpClient, private constants: Constants) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef, private fb: FormBuilder, private http: HttpClient, private constants: Constants) { }
 
   ngOnInit(): void {
     this.loadUser();
@@ -43,20 +43,31 @@ export class ProfileWallet implements OnInit {
     this.getWalletTransactions();
     window.addEventListener('auth-changed', this.onAuthChanged);
     window.addEventListener('storage', this.onAuthChanged);
+    window.addEventListener('wallet-changed', this.onWalletChanged);
     this.form = this.fb.group({
       customAmount: [null, [Validators.required, Validators.min(1)]]
     });
   }
 
+  ngOnDestroy(): void {
+    window.removeEventListener('auth-changed', this.onAuthChanged);
+    window.removeEventListener('storage', this.onAuthChanged);
+    window.removeEventListener('wallet-changed', this.onWalletChanged);
+  }
+
+  private onWalletChanged = () => {
+    this.loadWallet();
+  };
+
   private loadUser() {
+    this.currentUser = undefined;
+    const raw = localStorage.getItem('user');
+    if (!raw) return;
+    try {
+      this.currentUser = Convert.toUserLoginRespon(raw);
+    } catch {
       this.currentUser = undefined;
-      const raw = localStorage.getItem('user');
-      if (!raw) return;
-      try {
-        this.currentUser = Convert.toUserLoginRespon(raw);
-      } catch {
-        this.currentUser = undefined;
-      }
+    }
   }
 
   private loadWallet() {
@@ -105,11 +116,23 @@ export class ProfileWallet implements OnInit {
 
     this.http.post(`${this.constants.API_ENDPOINT}/api/wallet/topup`, body, { headers })
       .subscribe({
-        // next: (res) => alert('เติมเงินสำเร็จ: ' + amount),
-        error: (err) => alert('เกิดข้อผิดพลาด')
+        next: (res: any) => {
+
+          this.loadWallet();
+          this.getWalletTransactions();
+
+          window.dispatchEvent(new CustomEvent('wallet-changed'));
+          localStorage.setItem('wallet-updated', Date.now().toString());
+
+          window.dispatchEvent(new CustomEvent('auth-changed'));
+
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          alert('เกิดข้อผิดพลาดในการเติมเงิน');
+          console.error('Top-up failed:', err);
+        }
       });
-      window.dispatchEvent(new Event('auth-changed'));
-      this.cdr.markForCheck();
   }
 
   private getWalletTransactions() {

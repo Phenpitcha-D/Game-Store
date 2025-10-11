@@ -19,8 +19,8 @@
                             <span class="text-white-50 small text-truncate">
                                 Never played
                             </span>
-                            <button type="button" class="btn btn-soft rounded-pill px-3">
-                                Play
+                            <button  [routerLink]="['/game-detail', g?.gid]" type="button" class="btn btn-soft rounded-pill px-3">
+                                Details
                             </button>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                 <p class="text-secondary mb-3">
                     Browse the store and add some games to your collection.
                 </p>
-                <a routerLink="/store" class="btn btn-soft-strong rounded-pill px-4">
+                <a href="" class="btn btn-soft-strong rounded-pill px-4">
                     Go to Store
                 </a>
             </div>

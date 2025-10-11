@@ -151,6 +151,10 @@ export class GameDetail implements OnInit, OnDestroy {
         this.lastPaidOrderId = res?.order?.oid;
         this.isBuyOpen = false;
 
+        window.dispatchEvent(new CustomEvent('wallet-changed'));
+        window.dispatchEvent(new CustomEvent('auth-changed'));
+
+
         // รีเฟรชข้อมูลเกม (กันราคา/สต็อก/ฯลฯ เปลี่ยน)
         this.loadGame();
 
