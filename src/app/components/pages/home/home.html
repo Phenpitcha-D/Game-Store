@@ -54,7 +54,8 @@
               </div>
 
               <div class="d-flex flex-wrap gap-2">
-                <a class="btn btn-soft rounded-3 border border-divider" [routerLink]="['/game-detail', topgame?.gid]">View Details</a>
+                <a class="btn btn-soft rounded-3 border border-divider"
+                  [routerLink]="['/game-detail', topgame?.gid]">View Details</a>
                 <a class="btn btn-soft-strong rounded-3 border border-divider" (click)="addToCart(topgame!)">
                   <i class="bi bi-cart-plus me-2"></i>Add to Cart — ฿{{topgame?.price}}
                 </a>
@@ -76,10 +77,8 @@
             <span class="input-group-text bg-transparent text-secondary border border-divider">
               <i class="bi bi-search"></i>
             </span>
-            <input type="search"
-       class="form-control bg-glass border border-divider"
-       placeholder="Search games, genres, tags..."
-       [formControl]="gameSearch">
+            <input type="search" class="form-control bg-glass border border-divider"
+              placeholder="Search games, genres, tags..." [formControl]="gameSearch">
           </div>
         </div>
 
@@ -132,7 +131,8 @@
                       <span class="text-white-80 fw-semibold">฿{{ toPrice(g) }}</span>
 
                       <div class="d-flex gap-2">
-                        <a class="btn btn-soft rounded-3 border border-divider" [routerLink]="['/game-detail', g.gid]">Details</a>
+                        <a class="btn btn-soft rounded-3 border border-divider"
+                          [routerLink]="['/game-detail', g.gid]">Details</a>
 
                         <button type="button" class="btn btn-soft-strong rounded-3 border border-divider"
                           (click)="addToCart(g)">

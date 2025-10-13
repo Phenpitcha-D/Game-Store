@@ -40,7 +40,7 @@ export class ManageGame implements OnInit {
   droppedFiles: File[] = [];
   filePreviews: (string | null)[] = [];
 
-  // ✅ รูปเดิมจากเซิร์ฟเวอร์ + id ที่จะลบ
+  // รูปเดิมจากเซิร์ฟเวอร์ + id ที่จะลบ
   existingImages: ExistingImage[] = [];
   deleteImageIds: number[] = [];
 
@@ -115,7 +115,7 @@ export class ManageGame implements OnInit {
     const cats: GameTypeRes[] = (g.categories ?? []).map(c => ({ tid: c.tid, name: c.category_name }));
     this.selectedCats = cats;
 
-    // ✅ โหลดรูปเดิมมาโชว์เป็นพรีวิว
+    // โหลดรูปเดิมมาโชว์เป็นพรีวิว
     this.existingImages = (g.images ?? []).map(img => ({ imgid: img.imgid, url: img.url }));
     this.deleteImageIds = [];
 
@@ -148,7 +148,7 @@ export class ManageGame implements OnInit {
     if (v.released_at) fd.append('released_at', String(v.released_at));
     fd.append('developer', String(v.dev ?? '').trim());
     fd.append('categories', categoriesCSV);
-    // ✅ รูปที่ถูก mark เพื่อลบ
+    // รูปที่ถูก mark เพื่อลบ
     if (this.editingId && this.deleteImageIds.length) {
       fd.append('delete_image_ids', this.deleteImageIds.join(','));
     }
@@ -179,7 +179,7 @@ export class ManageGame implements OnInit {
     });
   }
 
-  // ✅ ลบเกมจริงด้วย DELETE /api/game/:gid
+  //ลบเกมจริงด้วย DELETE /api/game/:gid
   remove() {
     if (!this.editingId || this.isSubmitting) return;
 
@@ -202,7 +202,6 @@ export class ManageGame implements OnInit {
       error: (err) => {
         console.error('DELETE failed:', err);
         this.isSubmitting = false;
-        // ถ้ามีข้อความจากเซิร์ฟเวอร์ (เช่น 409 ลบไม่ได้เพราะ FK) ให้แสดง
         const msg = err?.error?.message || 'ลบไม่สำเร็จ ลองอีกครั้ง';
         this.setNotice(msg, 'error');
       }
@@ -217,7 +216,7 @@ export class ManageGame implements OnInit {
 
     this.form.reset({
       title: '',
-      price: 599,
+      price: 0,
       categories: [],
       dev: '',
       desc: '',

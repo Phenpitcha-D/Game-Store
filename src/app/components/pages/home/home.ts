@@ -11,25 +11,7 @@ import { GameCategoryRes } from '../../models/res/get_game_category_res';
 import { GetGameTypeRes } from '../../models/res/getGameType_res';
 import { GameTypeRes } from '../../models/res/gameType_res';
 import { RouterLink } from '@angular/router';
-
-export interface GetOrderResponse {
-    success: boolean;
-    message: string;
-    order:   Order;
-    items:   any[];
-}
-
-export interface Order {
-    oid:          number;
-    uid:          number;
-    pid:          null;
-    status:       string;
-    total_before: string;
-    total_after:  string;
-    created_at:   string;
-    paid_at:      null;
-}
-
+import { GetOrderResponse } from '../../models/res/getOrder_res';
 
 
 @Component({
@@ -229,6 +211,10 @@ export class Home implements OnInit, OnDestroy {
     if (term) {
       list = list.filter(g => this.normalize(g?.name || '').includes(term));
     }
+
+    if (this.topgame?.gid) {
+    list = list.filter(g => g.gid !== this.topgame?.gid);
+  }
 
     this.gamesFilted = list;
     this.cdr.markForCheck();

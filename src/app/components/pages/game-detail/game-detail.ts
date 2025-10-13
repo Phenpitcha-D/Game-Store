@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { map, Subscription, switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { GameResponse } from '../../models/res/games_res';
+import { GetOrderResponse } from '../../models/res/getOrder_res';
 
 export interface GetGameResponse {
   success: boolean;
@@ -43,7 +44,7 @@ export class GameDetail implements OnInit, OnDestroy {
     'https://picsum.photos/seed/ss2/960/540'
   ];
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.sub = this.route.paramMap.subscribe(params => {
@@ -58,8 +59,12 @@ export class GameDetail implements OnInit, OnDestroy {
     return (this.game?.images?.[0]?.url) ?? this.fallbackHero;
   }
   get gallerySrcs(): string[] {
-    return (this.game?.images?.map(i => i.url)) ?? this.galleryFallback;
-  }
+  const imgs = this.game?.images ?? [];
+  return imgs.length > 1
+    ? imgs.slice(1).map(i => i.url)
+    : imgs.map(i => i.url).length ? [] : this.galleryFallback;
+}
+
   get priceNumber(): number {
     return Number(this.game?.price ?? 0);
   }
@@ -71,7 +76,7 @@ export class GameDetail implements OnInit, OnDestroy {
   // === Helpers ===
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token') || '';
-    let headers = new HttpHeaders({'Content-Type': 'application/json'});
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (token) headers = headers.set('Authorization', `Bearer ${token}`);
     return headers;
   }
@@ -95,7 +100,26 @@ export class GameDetail implements OnInit, OnDestroy {
   }
 
   // === Actions ===
-  addToCart(g: any) { /* ของเดิมคุณจะใส่ภายหลังได้เลย */ }
+  addToCart(g: GameResponse) {
+    const token = localStorage.getItem('token') ?? '';
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+
+    const url = `${this.base}/api/order`
+    var oid = 0;
+    this.http.post<GetOrderResponse>(url, null, { headers }).pipe(
+      map(res => res.order.oid),
+
+      switchMap(oid =>
+        this.http.post(`${this.base}/api/order/${oid}/items`, { gid: g.gid }, { headers })
+      ),
+    ).subscribe({
+      next: () => {
+        window.dispatchEvent(new CustomEvent('cart-changed'));
+        localStorage.setItem('cart-updated', Date.now().toString());
+      },
+      error: (err) => console.error('addToCart error:', err),
+    });
+  }
   toggleBuy() { this.isBuyOpen = !this.isBuyOpen; }
 
   applyPromo() {
