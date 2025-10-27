@@ -4,22 +4,22 @@
             <h5 class="text-white fw-semibold mb-3">Top Sellers (by date)</h5>
 
             <div class="seller-list d-grid gap-3">
-                <button class="seller-item text-start" *ngFor="let g of games" (click)="goToDetails(g)">
+                <button class="seller-item text-start" *ngFor="let g of games" [routerLink]="['/game-detail', g.gid]">
                     <div class="d-flex align-items-center">
                         <!-- rank bubble -->
                         <div class="rank me-3">
-                            <span>#{{ g.rank }}</span>
+                            <span>#{{ g.rank_score }}</span>
                         </div>
 
                         <!-- cover -->
                         <div class="cover me-3">
-                            <img [src]="g.cover" alt="{{g.title}}">
+                            <img [src]="g.images[0].url" alt="{{g.name}}">
                         </div>
 
                         <!-- title + subtitle -->
                         <div class="flex-grow-1 overflow-hidden">
-                            <div class="title text-white text-truncate">{{ g.title }}</div>
-                            <div class="sub text-secondary">Sales period: {{ g.salesDate }}</div>
+                            <div class="title text-white text-truncate">{{ g.name }}</div>
+                            <div class="sub text-secondary">Sold count: {{ g.sold_count }}</div>
                         </div>
 
                         <!-- price chip -->

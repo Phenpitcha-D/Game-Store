@@ -1,67 +1,62 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-type Game = {
-  id: string;
-  rank: number;
-  title: string;
-  salesDate: string; // YYYY-MM-DD
-  price: number;
-  cover: string;     // path รูป
-};
+import { Router, RouterLink } from '@angular/router';
+import { Constants } from '../../../config/constants';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Game } from '../../models/req/topseller';
 
 @Component({
   selector: 'app-top-sellers',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, HttpClientModule],
   templateUrl: './top-sellers.html',
   styleUrl: './top-sellers.scss'
 })
-export class TopSellers {
-  games: Game[] = [
-    {
-      id: 'death-stranding',
-      rank: 1,
-      title: "Death Stranding : Director’s cut",
-      salesDate: '2025-09-01',
-      price: 399,
-      cover: 'https://cdn2.unrealengine.com/cyberpunk-ds-carousel-1920x1080-1920x1080-2cead0da0561.jpg'
-    },
-    {
-      id: 're4',
-      rank: 2,
-      title: 'Resident Evil 4',
-      salesDate: '2025-09-01',
-      price: 599,
-      cover: 'https://cdn2.unrealengine.com/cyberpunk-ds-carousel-1920x1080-1920x1080-2cead0da0561.jpg'
-    },
-    {
-      id: 'wukong',
-      rank: 3,
-      title: 'Black Myth: Wukong',
-      salesDate: '2025-09-01',
-      price: 799,
-      cover: 'https://cdn2.unrealengine.com/cyberpunk-ds-carousel-1920x1080-1920x1080-2cead0da0561.jpg'
-    },
-    {
-      id: 'elden-ring-nightreign',
-      rank: 4,
-      title: 'ELDEN RING NIGHTREIGN',
-      salesDate: '2025-09-01',
-      price: 899,
-      cover: 'https://cdn2.unrealengine.com/cyberpunk-ds-carousel-1920x1080-1920x1080-2cead0da0561.jpg'
-    },
-    {
-      id: 'rdr2',
-      rank: 5,
-      title: 'Red Dead Redemption 2',
-      salesDate: '2025-09-01',
-      price: 329,
-      cover: 'https://cdn2.unrealengine.com/cyberpunk-ds-carousel-1920x1080-1920x1080-2cead0da0561.jpg'
-    }
-  ];
-
-  goToDetails(game: Game) {
-    // ใส่ router.navigate(['/details', game.id]) ได้ตามโครง route ของคุณ
-    console.log('open details:', game.id);
+export class TopSellers implements OnInit {
+  games: Game[] = [];
+  constructor(private constants: Constants,private http: HttpClient,
+    private router: Router,
+    private cdr: ChangeDetectorRef){}
+  ngOnInit(): void {
+    this.loadTopSeller();
   }
+  loadTopSeller(){
+    this.http.get<TopGameReturn>(`https://game-store-backend-vs08.onrender.com/api/top-sellers`).subscribe(
+      (response) => {
+        this.games = response.data;
+        this.cdr.detectChanges();
+      }
+    );
+  }
+}
+
+export interface TopGameReturn {
+    success: boolean;
+    scope:   Scope;
+    count:   number;
+    data:    Datum[];
+}
+
+export interface Datum {
+    gid:           number;
+    name:          string;
+    price:         number;
+    developer:     string;
+    rank_score:    number;
+    sold_count:    number;
+    total_revenue: number;
+    first_paid_at: Date;
+    last_paid_at:  Date;
+    images:        Image[];
+}
+
+export interface Image {
+    imgid:      number;
+    gid:        number;
+    url:        string;
+    created_at: Date;
+}
+
+export interface Scope {
+    type: string;
+    date: null;
 }
